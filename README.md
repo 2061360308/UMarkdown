@@ -4,9 +4,9 @@
 
 依赖于PySide6,CodeMirror,Marked,highlight等构建的markdown编辑器
 
-![GitHub Repo stars](https://img.shields.io/github/stars/muziing/PySide6-Code-Tutorial)
-![License](https://img.shields.io/github/license/muziing/PySide6-Code-Tutorial)
-![GitHub Last Commit](https://img.shields.io/github/last-commit/muziing/PySide6-Code-Tutorial)
+![GitHub Repo stars](https://img.shields.io/github/stars/2061360308/UMarkdown)
+![License](https://img.shields.io/github/license/2061360308/UMarkdown)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/2061360308/UMarkdown)
 [![PySide Version](https://img.shields.io/badge/PySide-6.4-blue)](https://doc.qt.io/qtforpython/index.html)
 ## 简介 / 特性
 
