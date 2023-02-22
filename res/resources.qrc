@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC>
+    <qresource prefix="icons">
+        <file alias="UMarkdownIcon_ico">image/logo.ico</file>
+        <file alias="UMarkdownIcon_png">image/logo.png</file>
+    </qresource>
+    <qresource prefix="fonts">
+        <file alias="iconfont">fonts/iconfont.ttf</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,167 @@
+/*
+{
+#1de9b6  主色 QTMATERIAL_PRIMARYCOLOR
+#6effe8  亮主色 QTMATERIAL_PRIMARYLIGHTCOLOR
+#232629  次要颜色 QTMATERIAL_SECONDARYCOLOR
+#4f5b62  亮次要颜色 QTMATERIAL_SECONDARYLIGHTCOLOR
+#31363b  暗主色 QTMATERIAL_SECONDARYDARKCOLOR
+#000000  主色背景下文本颜色 QTMATERIAL_PRIMARYTEXTCOLOR
+#ffffff  次要颜色下文本颜色 QTMATERIAL_SECONDARYTEXTCOLOR
+}
+*/
+
+/* web框架样式 */
+
+:root {
+    --center-splitter-width: 20px;
+    --QTMATERIAL_PRIMARYCOLOR: {{ QTMATERIAL_PRIMARYCOLOR }}; /* 主色 */
+    --QTMATERIAL_PRIMARYLIGHTCOLOR: {{ QTMATERIAL_PRIMARYLIGHTCOLOR }}; /* 亮主色 */
+    --QTMATERIAL_SECONDARYCOLOR: {{ QTMATERIAL_SECONDARYCOLOR }}; /* 次要颜色 */
+    --QTMATERIAL_SECONDARYLIGHTCOLOR: {{ QTMATERIAL_SECONDARYLIGHTCOLOR }}; /* 亮次要颜色 */
+    --QTMATERIAL_SECONDARYDARKCOLOR: {{ QTMATERIAL_SECONDARYDARKCOLOR }}; /* 暗主色 */
+    --QTMATERIAL_PRIMARYTEXTCOLOR: {{ QTMATERIAL_PRIMARYTEXTCOLOR }}; /* 主色背景下文本颜色 */
+    --QTMATERIAL_SECONDARYTEXTCOLOR: {{ QTMATERIAL_SECONDARYTEXTCOLOR }}; /* 次要颜色下文本颜色 */
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+html,body,.CodeMirror{
+    width: 100%;
+    height: 100%;
+}
+
+html {
+    overflow-x:hidden; //隐藏水平滚动条
+    overflow-y:hidden;//隐藏垂直滚动条
+}
+
+body,html{
+    overflow: hidden;
+}
+
+#editor{
+    /*background-color: #2E8B57;*/
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/*编辑器设置*/
+/*背景*/
+.cm-s-dracula.CodeMirror{
+    {# background-color: {{QTMATERIAL_SECONDARYCOLOR}}{{transparency_16}} !important; #}
+    background-color: #00000000;
+    /* 默认颜色，像括号这种 */
+    color: var(--QTMATERIAL_SECONDARYTEXTCOLOR) !important;
+}
+
+/* 沟槽 */
+.CodeMirror-gutters {
+    color: var(--QTMATERIAL_PRIMARYCOLOR);
+    background-color: #00000000;
+    border-right: 1px solid var(--QTMATERIAL_PRIMARYCOLOR);
+}
+
+/*光标*/
+.cm-s-{{ theme_name }} .CodeMirror-cursor { border-left-color: var(--QTMATERIAL_SECONDARYTEXTCOLOR); }
+
+
+/* 其他零碎 */
+.cm-s-dracula .CodeMirror-linenumber { color: var(--QTMATERIAL_PRIMARYCOLOR); }
+.cm-s-dracula .CodeMirror-selected { background: rgba(255, 255, 255, 0.10); }
+.cm-s-dracula .CodeMirror-line::selection, .cm-s-dracula .CodeMirror-line > span::selection, .cm-s-dracula .CodeMirror-line > span > span::selection { background: rgba(255, 255, 255, 0.10); }
+.cm-s-dracula .CodeMirror-line::-moz-selection, .cm-s-dracula .CodeMirror-line > span::-moz-selection, .cm-s-dracula .CodeMirror-line > span > span::-moz-selection { background: rgba(255, 255, 255, 0.10); }
+.cm-s-dracula .CodeMirror-activeline-background { background: rgba(255,255,255,0.1); }
+.cm-s-dracula .CodeMirror-matchingbracket { text-decoration: underline; color: white !important; }
+
+/* 额外美化 */
+/* 滚动条 */
+::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+		background-color: rgba(240, 240, 240, 0);
+}
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+		box-shadow: inset 0 0 0px rgba(240, 240, 240, 0);
+		border-radius: 10px;
+		background-color: rgba(240, 240, 240, 0);
+}
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		box-shadow: inset 0 0 0px rgba(237, 44, 37, 0);
+		background-color: {{QTMATERIAL_SECONDARYLIGHTCOLOR}}CC;
+}
+/* markdown专属 */
+/* 标题 */
+.cm-header-1{
+    font-size: 280%;
+}
+
+.cm-header-2{
+    font-size: 240%;
+}
+
+.cm-header-3{
+    font-size: 210%;
+}
+
+.cm-header-4{
+    font-size: 180%;
+}
+
+.cm-header-5{
+    font-size: 140%;
+}
+
+.cm-header-6{
+    font-size: 110%;
+}
+
+.cm-strong{
+    font-weight: bold;
+}
+
+.cm-formatting{
+    font-size: 140%;
+    color: rgba(139,158,177,0.8) !important;
+}
+
+/* 关键字 */
+.cm-s-{{ theme_name }} span.cm-keyword {color: {{ var_keyword }};}
+/* 字符串 */
+.cm-s-{{ theme_name }} span.cm-string {color: {{ var_string }};}
+/* 字符串 */
+.cm-s-{{ theme_name }} span.cm-string-2 {color: {{ var_string_2 }};}
+/* 数字 */
+.cm-s-{{ theme_name }} span.cm-number {color: {{ var_number }};}
+/* 变量 父类名 */
+.cm-s-{{ theme_name }} span.cm-variable {color: {{ var_variable }};}
+/* 变量 self */
+.cm-s-{{ theme_name }} span.cm-variable-2 {color: {{ var_variable_2 }};}
+/* */
+.cm-s-{{ theme_name }} span.cm-variable-3 {color: {{ var_variable_3 }};}
+/* 函数 */
+.cm-s-{{ theme_name }} span.cm-def {color: {{ var_def }};}
+/* 运算符 */
+.cm-s-{{ theme_name }} span.cm-operator {color: {{ var_operator }};}
+/* */
+.cm-s-{{ theme_name }} span.cm-atom {color: {{ var_atom }};}
+/* */
+.cm-s-{{ theme_name }} span.cm-meta {color: {{ var_meta }};}
+/* */
+.cm-s-{{ theme_name }} span.cm-tag {color: {{ var_tag }};}
+/* */
+.cm-s-{{ theme_name }} span.cm-attribute {color: {{ var_attribute }};}
+/* */
+.cm-s-{{ theme_name }} span.cm-qualifier {color: {{ var_qualifier }};}
+/* 成员属性 */
+.cm-s-{{ theme_name }} span.cm-property {color: {{ var_property }};}
+/* */
+.cm-s-{{ theme_name }} span.cm-builtin {color: {{ var_builtin }};}
+/* */
+.cm-s-{{ theme_name }} span.cm-type {color: {{ var_type }};}

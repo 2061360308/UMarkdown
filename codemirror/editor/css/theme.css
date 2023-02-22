@@ -1,0 +1,167 @@
+/*
+{
+#1de9b6  主色 QTMATERIAL_PRIMARYCOLOR
+#6effe8  亮主色 QTMATERIAL_PRIMARYLIGHTCOLOR
+#232629  次要颜色 QTMATERIAL_SECONDARYCOLOR
+#4f5b62  亮次要颜色 QTMATERIAL_SECONDARYLIGHTCOLOR
+#31363b  暗主色 QTMATERIAL_SECONDARYDARKCOLOR
+#000000  主色背景下文本颜色 QTMATERIAL_PRIMARYTEXTCOLOR
+#ffffff  次要颜色下文本颜色 QTMATERIAL_SECONDARYTEXTCOLOR
+}
+*/
+
+/* web框架样式 */
+
+:root {
+    --center-splitter-width: 20px;
+    --QTMATERIAL_PRIMARYCOLOR: #4dd0e1; /* 主色 */
+    --QTMATERIAL_PRIMARYLIGHTCOLOR: #88ffff; /* 亮主色 */
+    --QTMATERIAL_SECONDARYCOLOR: #232629; /* 次要颜色 */
+    --QTMATERIAL_SECONDARYLIGHTCOLOR: #4f5b62; /* 亮次要颜色 */
+    --QTMATERIAL_SECONDARYDARKCOLOR: #31363b; /* 暗主色 */
+    --QTMATERIAL_PRIMARYTEXTCOLOR: #000000; /* 主色背景下文本颜色 */
+    --QTMATERIAL_SECONDARYTEXTCOLOR: #ffffff; /* 次要颜色下文本颜色 */
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+html,body,.CodeMirror{
+    width: 100%;
+    height: 100%;
+}
+
+html {
+    overflow-x:hidden; //隐藏水平滚动条
+    overflow-y:hidden;//隐藏垂直滚动条
+}
+
+body,html{
+    overflow: hidden;
+}
+
+#editor{
+    /*background-color: #2E8B57;*/
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/*编辑器设置*/
+/*背景*/
+.cm-s-dracula.CodeMirror{
+    
+    background-color: #00000000;
+    /* 默认颜色，像括号这种 */
+    color: var(--QTMATERIAL_SECONDARYTEXTCOLOR) !important;
+}
+
+/* 沟槽 */
+.CodeMirror-gutters {
+    color: var(--QTMATERIAL_PRIMARYCOLOR);
+    background-color: #00000000;
+    border-right: 1px solid var(--QTMATERIAL_PRIMARYCOLOR);
+}
+
+/*光标*/
+.cm-s-dracula .CodeMirror-cursor { border-left-color: var(--QTMATERIAL_SECONDARYTEXTCOLOR); }
+
+
+/* 其他零碎 */
+.cm-s-dracula .CodeMirror-linenumber { color: var(--QTMATERIAL_PRIMARYCOLOR); }
+.cm-s-dracula .CodeMirror-selected { background: rgba(255, 255, 255, 0.10); }
+.cm-s-dracula .CodeMirror-line::selection, .cm-s-dracula .CodeMirror-line > span::selection, .cm-s-dracula .CodeMirror-line > span > span::selection { background: rgba(255, 255, 255, 0.10); }
+.cm-s-dracula .CodeMirror-line::-moz-selection, .cm-s-dracula .CodeMirror-line > span::-moz-selection, .cm-s-dracula .CodeMirror-line > span > span::-moz-selection { background: rgba(255, 255, 255, 0.10); }
+.cm-s-dracula .CodeMirror-activeline-background { background: rgba(255,255,255,0.1); }
+.cm-s-dracula .CodeMirror-matchingbracket { text-decoration: underline; color: white !important; }
+
+/* 额外美化 */
+/* 滚动条 */
+::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+		background-color: rgba(240, 240, 240, 0);
+}
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+		box-shadow: inset 0 0 0px rgba(240, 240, 240, 0);
+		border-radius: 10px;
+		background-color: rgba(240, 240, 240, 0);
+}
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		box-shadow: inset 0 0 0px rgba(237, 44, 37, 0);
+		background-color: #4f5b62CC;
+}
+/* markdown专属 */
+/* 标题 */
+.cm-header-1{
+    font-size: 280%;
+}
+
+.cm-header-2{
+    font-size: 240%;
+}
+
+.cm-header-3{
+    font-size: 210%;
+}
+
+.cm-header-4{
+    font-size: 180%;
+}
+
+.cm-header-5{
+    font-size: 140%;
+}
+
+.cm-header-6{
+    font-size: 110%;
+}
+
+.cm-strong{
+    font-weight: bold;
+}
+
+.cm-formatting{
+    font-size: 140%;
+    color: rgba(139,158,177,0.8) !important;
+}
+
+/* 关键字 */
+.cm-s-dracula span.cm-keyword {color: #e5900d;}
+/* 字符串 */
+.cm-s-dracula span.cm-string {color: #50fa7b;}
+/* 字符串 */
+.cm-s-dracula span.cm-string-2 {color: #896724;}
+/* 数字 */
+.cm-s-dracula span.cm-number {color: #f1fa8c;}
+/* 变量 父类名 */
+.cm-s-dracula span.cm-variable {color: #896724;}
+/* 变量 self */
+.cm-s-dracula span.cm-variable-2 {color: #6272a4;}
+/* */
+.cm-s-dracula span.cm-variable-3 {color: #896724;}
+/* 函数 */
+.cm-s-dracula span.cm-def {color: #d0cccc;}
+/* 运算符 */
+.cm-s-dracula span.cm-operator {color: #ffb86c;}
+/* */
+.cm-s-dracula span.cm-atom {color: #896724;}
+/* */
+.cm-s-dracula span.cm-meta {color: #896724;}
+/* */
+.cm-s-dracula span.cm-tag {color: #896724;}
+/* */
+.cm-s-dracula span.cm-attribute {color: #896724;}
+/* */
+.cm-s-dracula span.cm-qualifier {color: #896724;}
+/* 成员属性 */
+.cm-s-dracula span.cm-property {color: #ff79c6;}
+/* */
+.cm-s-dracula span.cm-builtin {color: #896724;}
+/* */
+.cm-s-dracula span.cm-type {color: #896724;}

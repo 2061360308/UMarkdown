@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <title>CodeMirror 5</title>
+  <meta charset="utf-8"/>
+
+  <link href="lib/codemirror.css" rel=stylesheet>
+  <link href="doc/docs.css" rel=stylesheet>
+  <script src="lib/codemirror.js"></script>
+  <script src="mode/xml/xml.js"></script>
+  <script src="mode/javascript/javascript.js"></script>
+  <script src="mode/css/css.js"></script>
+  <script src="mode/htmlmixed/htmlmixed.js"></script>
+  <script src="addon/edit/matchbrackets.js"></script>
+
+  <link href="theme/dracula.css" rel="stylesheet"/>
+
+  <!--支持代码折叠-->
+  <link rel="stylesheet" href="addon/fold/foldgutter.css"/>
+  <script src="addon/fold/foldcode.js"></script>
+  <script src="addon/fold/foldgutter.js"></script>
+  <script src="addon/fold/brace-fold.js"></script>
+  <script src="addon/fold/comment-fold.js"></script>
+</head>
+<body>
+
+<textarea id="editor" style="width: 100%;height:100%">
+  var editor = CodeMirror.fromTextArea(myTextarea, {
+    lineNumbers: true
+  });
+</textarea>
+
+</body>
+
+
+<script>
+  let myTextarea = document.getElementById('editor');
+  this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
+    mode: 'javascript',  //编辑器语言
+    theme: 'dracula', //编辑器主题
+    extraKeys: {"Ctrl": "autocomplete"},//ctrl可以弹出选择项
+    lineNumbers: true,  //显示行号
+    lineWrapping: true,	//代码折叠
+    fullScreen:true,
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    matchBrackets: true,	//括号匹配
+    //readOnly: true,        //只读
+  });
+</script>
+</html>

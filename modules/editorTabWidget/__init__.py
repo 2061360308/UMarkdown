@@ -1,0 +1,1 @@
+from .editorTabWiddgetMain import EditorTabWidget

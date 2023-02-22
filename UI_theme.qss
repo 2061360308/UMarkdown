@@ -1,0 +1,70 @@
+QMainWindow{{
+    background-color: {QTMATERIAL_SECONDARYCOLOR};
+    border-radius:30px;
+}}
+
+
+#bgImageLabel{{
+    background-color:{QTMATERIAL_SECONDARYCOLOR};
+}}
+
+
+#maxButton,#minButton,#closeButton{{
+    font-size: 20px;
+}}
+
+
+.iconfontW{{
+    font-family: iconfont;
+    color: {QTMATERIAL_PRIMARYCOLOR};
+}}
+
+
+QSplitter::handle{{
+    background-color: {QTMATERIAL_PRIMARYCOLOR};
+}}
+
+
+QSplitter::handle:pressed{{
+    background-color: {QTMATERIAL_PRIMARYLIGHTCOLOR};
+}}
+
+
+#MainWindowSplitter{{
+    border-left: 5px solid #D14f5b62;
+    border-right: 5px solid #D131363b;
+}}
+
+#titleMenuBar{{
+    background-color:{QTMATERIAL_SECONDARYLIGHTCOLOR};
+    border-bottom: 1px solid #D1232629;
+}}
+
+
+
+#stackedW{{
+    background-color:#D14f5b62;
+    border-top: 1px solid #D1232629;
+    border-bottom: 1px solid #D1232629;
+}}
+
+#editorTabWidget::tab-bar {{
+    background-color:#D1232629;
+}}
+
+#editorTabWidget > QWidget {{
+    background-color:#D1232629;
+    
+}}
+
+
+
+
+#statusBarW{{
+    background-color:#D14f5b62;
+}}
+
+#toolBarW{{
+    background-color:#D14f5b62;
+}}
+

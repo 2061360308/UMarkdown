@@ -1,0 +1,109 @@
+QMainWindow{{
+    background-color: {QTMATERIAL_SECONDARYCOLOR};
+    border-radius:30px;
+}}
+
+{# 主窗口背景label #}
+#bgImageLabel{{
+    background-color:{QTMATERIAL_SECONDARYCOLOR};
+}}
+
+{# 自定义标题栏的最小化最大化关闭按钮 #}
+#maxButton,#minButton,#closeButton{{
+    font-size: 20px;
+}}
+
+{#
+    所有使用了iconfont的组件
+    指定他们的字体为图标字体，
+    指定他们的颜色是主题主色调
+#}
+.iconfontW{{
+    font-family: iconfont;
+    color: {QTMATERIAL_PRIMARYCOLOR};
+}}
+
+{# QSplitter的handle #}
+QSplitter::handle{{
+    background-color: {QTMATERIAL_PRIMARYCOLOR};
+}}
+
+{# QSplitter的handle按下 #}
+QSplitter::handle:pressed{{
+    background-color: {QTMATERIAL_PRIMARYLIGHTCOLOR};
+}}
+
+{# 左右两边各留5px，颜色分别匹配好 #}
+#MainWindowSplitter{{
+    border-left: 5px solid #<transparency_16><QTMATERIAL_SECONDARYLIGHTCOLOR[1:]>;
+    border-right: 5px solid #<transparency_16><QTMATERIAL_SECONDARYDARKCOLOR[1:]>;
+}}
+
+#titleMenuBar{{
+    background-color:{QTMATERIAL_SECONDARYLIGHTCOLOR};
+    border-bottom: 1px solid #<transparency_16><QTMATERIAL_SECONDARYCOLOR[1:]>;
+}}
+
+{# 需要根据透明度和主题生成其背景色的组件 #}
+{# 主窗口的堆叠窗口 #}
+#stackedW{{
+    background-color:#<transparency_16><QTMATERIAL_SECONDARYLIGHTCOLOR[1:]>;
+    border-top: 1px solid #<transparency_16><QTMATERIAL_SECONDARYCOLOR[1:]>;
+    border-bottom: 1px solid #<transparency_16><QTMATERIAL_SECONDARYCOLOR[1:]>;
+}}
+
+#editorTabWidget::tab-bar {{
+    background-color:#<transparency_16><QTMATERIAL_SECONDARYCOLOR[1:]>;
+}}
+
+#editorTabWidget > QWidget {{
+    background-color:#<transparency_16><QTMATERIAL_SECONDARYCOLOR[1:]>;
+    {#background-color: red;#}
+}}
+
+{#
+标题栏，设置标题栏的透明度
+#titleMenuBar{{
+    background-color:#<transparency_16><QTMATERIAL_SECONDARYDARKCOLOR[1:]>;
+    }}
+#}
+
+{# 状态栏组件 #}
+#statusBarW{{
+    background-color:#<transparency_16><QTMATERIAL_SECONDARYLIGHTCOLOR[1:]>;
+}}
+{# 工具栏组件 #}
+#toolBarW{{
+    background-color:#<transparency_16><QTMATERIAL_SECONDARYLIGHTCOLOR[1:]>;
+}}
+
+{# 工具栏按钮
+/* tagsButton */
+#tagsButton:checked{{
+    background-color:{QTMATERIAL_PRIMARYCOLOR};
+}}
+
+#tagsButton:checked:hover{{
+
+}}
+
+#tagsButton:checked:pressed{{
+
+}}
+
+#tagsButton:!checked{{
+    background-color:{QTMATERIAL_SECONDARYDARKCOLOR};
+}}
+
+#tagsButton:!checked:hover{{
+
+}}
+
+#tagsButton:!checked:pressed{{
+
+}}
+
+#tagsButton:!enabled{{
+
+}}
+#}
