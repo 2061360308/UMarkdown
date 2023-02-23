@@ -31,29 +31,29 @@ QSplitter::handle:pressed{{
 
 
 #MainWindowSplitter{{
-    border-left: 5px solid #D14f5b62;
-    border-right: 5px solid #D131363b;
+    border-left: 5px solid #AA4f5b62;
+    border-right: 5px solid #AA31363b;
 }}
 
 #titleMenuBar{{
     background-color:{QTMATERIAL_SECONDARYLIGHTCOLOR};
-    border-bottom: 1px solid #D1232629;
+    border-bottom: 1px solid #AA232629;
 }}
 
 
 
 #stackedW{{
-    background-color:#D14f5b62;
-    border-top: 1px solid #D1232629;
-    border-bottom: 1px solid #D1232629;
+    background-color:#AA4f5b62;
+    border-top: 1px solid #AA232629;
+    border-bottom: 1px solid #AA232629;
 }}
 
 #editorTabWidget::tab-bar {{
-    background-color:#D1232629;
+    background-color:#AA232629;
 }}
 
 #editorTabWidget > QWidget {{
-    background-color:#D1232629;
+    background-color:#AA232629;
     
 }}
 
@@ -61,10 +61,10 @@ QSplitter::handle:pressed{{
 
 
 #statusBarW{{
-    background-color:#D14f5b62;
+    background-color:#AA4f5b62;
 }}
 
 #toolBarW{{
-    background-color:#D14f5b62;
+    background-color:#AA4f5b62;
 }}
 

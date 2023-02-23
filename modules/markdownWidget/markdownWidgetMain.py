@@ -1,3 +1,7 @@
+import os.path
+
+from PySide6.QtWidgets import QFileDialog
+
 from AppUMarkdown.application.modeIndex import moudelIndex
 from .ui import MarkdownWidgetUI
 
@@ -6,7 +10,6 @@ class MarkdownWidget(MarkdownWidgetUI):
     # 属性
     fileName = None  # 文件名
     filePath = None  # 文件路径
-    fileType = None  # 文件类型
     fileEncoding = None  # 文件编码
     fileContent = None  # 文件内容
     openEncoding = None  # 打开文件所用的编码
@@ -24,7 +27,6 @@ class MarkdownWidget(MarkdownWidgetUI):
     def initFile(self, **kwargs):
         self.fileName = kwargs.get("fileName")
         self.filePath = kwargs.get("filePath")
-        self.fileType = kwargs.get("fileType")
         self.fileEncoding = kwargs.get("fileEncoding")
         self.fileContent = kwargs.get("fileContent")
         self.openEncoding = kwargs.get("openEncoding")
@@ -49,3 +51,22 @@ class MarkdownWidget(MarkdownWidgetUI):
 
     def updateTheme(self):
         self.codemirrorWidget.updateTheme()
+
+    def saveFile(self) -> bool:
+        filePath = self.filePath
+        # fileEncoding = widget.fileEncoding
+        # fileContent = widget.fileContent
+        if self.filePath is None:
+            fName, _ = QFileDialog.getSaveFileName(self, '保存文件', self.fileName,
+                                                   'Markdown文件(*.md)')
+            if fName != '':
+                # self.editorTabWidget.openFileByInf(fName, 'UTF-8', "")
+                self.filePath = fName
+                self.fileName = os.path.split(fName)[1]
+            else:
+                return False
+
+        with open(self.filePath, 'w+', encoding=self.fileEncoding) as f:
+            f.write(self.fileContent)
+        return True
+

@@ -1,7 +1,7 @@
 import os
 
-from PySide6.QtCore import QTimer
-from PySide6.QtGui import QPixmap
+from PySide6.QtCore import QTimer, Qt
+from PySide6.QtGui import QPixmap, QIcon
 from PySide6.QtWidgets import QWidget, QComboBox, QFileDialog
 
 from AppUMarkdown.application.modeIndex import moudelIndex
@@ -19,6 +19,8 @@ class Theme(QWidget):
         self.ui.setupUi(self)
 
         self.setWindowTitle("主题")
+        self.setWindowIcon(QIcon(":/icons/UMarkdownIcon_png"))
+        self.setWindowModality(Qt.ApplicationModal)
 
         # 创建完元素再绑定信号，避免初始化数据时触发绑定信号
         self.init()
