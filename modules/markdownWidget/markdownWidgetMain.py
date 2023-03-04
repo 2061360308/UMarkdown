@@ -70,3 +70,20 @@ class MarkdownWidget(MarkdownWidgetUI):
             f.write(self.fileContent)
         return True
 
+    def saveFileAs(self) -> bool:
+        fName, _ = QFileDialog.getSaveFileName(self, '另存文件为', self.fileName,
+                                               'Markdown文件(*.md)')
+        if fName != '':
+            # self.editorTabWidget.openFileByInf(fName, 'UTF-8', "")
+            self.filePath = fName
+            self.fileName = os.path.split(fName)[1]
+
+            with open(self.filePath, 'w+', encoding=self.fileEncoding) as f:
+                f.write(self.fileContent)
+
+            return True
+
+        else:
+            return False
+
+

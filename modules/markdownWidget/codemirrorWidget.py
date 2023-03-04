@@ -39,6 +39,7 @@ class Bridge(QObject):
 
     @Slot(str)
     def contentChange(self, content):
+        # print("内容改变事件被触发")
         self.parent().contentChangeSignal.emit(content)
 
 

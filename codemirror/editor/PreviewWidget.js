@@ -37,11 +37,9 @@ window.onload = function () {
     /*Python留有的接口，通过它调用Python函数*/
     new QWebChannel(qt.webChannelTransport, function (channel) {
         PythonBridge = channel.objects.Bridge  // 获取Qt注册的对象
-        console.log(PythonBridge);
+        initMarked();
+        PythonBridge.loadFinish();
     });
-
-
-    initMarked()
 }
 
 function initMarked() {
@@ -178,7 +176,8 @@ function changeTheme(stylesheetFile) {
 function prase(content){
     // let data1 = new Date().getTime();
     content = marked(content.data);
-    // let data2 = new Date().getTime();
+    console.log(content)
+    console.log(tocObj)
     tocHtml = "<div class='toc'><h3>文章目录</h3> " + tocObj.toHTML() + "</div>";
     content = content.replace(/<p>\[Toc]<\/p>/g,tocHtml);
     preview_inner.innerHTML = content;

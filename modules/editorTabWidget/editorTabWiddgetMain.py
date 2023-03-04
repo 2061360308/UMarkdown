@@ -108,6 +108,24 @@ class EditorTabWidget(EditorTabWidgetUI):
         if widget.saveFile():
             self.removeTab(index)
 
+    def closeAll(self):
+        """
+        关闭所有标签页
+        :return:
+        """
+        for i in range(self.count()):
+            widget = self.widget(i)
+            if widget.saveFile():
+                self.removeTab(i)
+
+    def saveFileAs(self):
+        """
+        另存为
+        :return:
+        """
+        widget = self.currentWidget()
+        widget.saveFileAs()
+
     def tabNumChange(self):
         """
         tab 数发生改变
@@ -133,5 +151,3 @@ class EditorTabWidget(EditorTabWidgetUI):
         :return:
         """
         self.openFabricateFile("未命名.md", "UTF-8", "")
-
-

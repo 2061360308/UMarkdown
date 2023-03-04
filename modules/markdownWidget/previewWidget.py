@@ -1,6 +1,6 @@
 import json
 
-from PySide6.QtCore import QUrl, Qt, QObject, Signal
+from PySide6.QtCore import QUrl, Qt, QObject, Signal, Slot
 from PySide6.QtGui import QColor
 from PySide6.QtWebChannel import QWebChannel
 from PySide6.QtWebEngineCore import QWebEngineSettings
@@ -25,11 +25,27 @@ class Bridge(QObject):
         else:
             self.page.runJavaScript("%s(%s)" % (fun, json.dumps(data)), 0, js_callback)
 
+    @Slot()
+    def loadFinish(self):
+        """
+        加载完毕事件
+        :return:
+        """
+        self.parent().loadFinishSign = True
+
+        # 如果有之前的任务，那么加载
+        if self.parent().task:
+            self.runJavascript("prase", self.parent().task, self.parent().praseHtmlCallBack)
+            self.parent().task = None
+
 
 class PreviewWidget(QWebEngineView):
     """ 预览框 """
 
     tocUpdateSignal = Signal(str)
+
+    loadFinishSign = False
+    task = None
 
     def __init__(self, parent):
         super(PreviewWidget, self).__init__(parent)
@@ -47,7 +63,11 @@ class PreviewWidget(QWebEngineView):
         channel.registerObject("Bridge", self.JsBridge)  # 注册，js通过pythonBridge调用
 
     def praseHtml(self, content):
-        self.JsBridge.runJavascript("prase", content, self.praseHtmlCallBack)
+        # 先判断当前组件是否加载完毕，没有的话将这个任务暂时记录下来
+        if self.loadFinishSign:
+            self.JsBridge.runJavascript("prase", content, self.praseHtmlCallBack)
+        else:
+            self.task = content
 
     def praseHtmlCallBack(self, tocHtml):
         """

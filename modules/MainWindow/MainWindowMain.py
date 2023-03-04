@@ -108,6 +108,12 @@ class MainWindow(MainWindowUI):
                                                    'Markdown文件(*.md *.markdown *.readme *.readMe)')
             if fName != '':
                 self.editorTabWidget.openFile(fName)
+        elif text == "另存为":
+            self.editorTabWidget.saveFileAs()
+        elif text == "关闭当前所有文件":
+            self.editorTabWidget.closeAll()
+        elif text == "退出":
+            self.close()
 
     def closeEvent(self, event: QCloseEvent) -> None:
         save_state(self)

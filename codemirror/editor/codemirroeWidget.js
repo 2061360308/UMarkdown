@@ -83,7 +83,6 @@ window.onload = function (){
     /*Python留有的接口，通过它调用Python函数*/
     new QWebChannel(qt.webChannelTransport, function(channel) {
         PythonBridge = channel.objects.Bridge  // 获取Qt注册的对象
-        console.log(PythonBridge);
         PythonBridge.loadFinish();
     });
 }
