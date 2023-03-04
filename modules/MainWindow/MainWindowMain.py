@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QPainter, QAction, QIcon, QCloseEvent
+from PySide6.QtGui import QPainter, QAction, QIcon, QCloseEvent, QKeySequence
 from PySide6.QtWidgets import QMenu, QFileDialog
 
 from AppUMarkdown.app_fun.windows_state import save_state, load_state
@@ -25,7 +25,11 @@ class MainWindow(MainWindowUI):
         self.file = self.titleMenuBar.addMenu("文件(F)")
         self.file.triggered[QAction].connect(self.fileMenuClicked)
         self.fileCreate = QAction("新建", self)
+        self.fileCreate.setShortcut(QKeySequence.New)
         self.fileOpen = QAction("打开", self)
+        self.fileOpen.setShortcut(QKeySequence.Open)
+        self.fileSave = QAction("保存", self)
+        self.fileSave.setShortcut(QKeySequence.Save)
         self.fileSaveAs = QAction("另存为", self)
         self.fileOpenRecent = QAction("打开最近", self)
         self.fileCloseAll = QAction("关闭当前所有文件", self)
@@ -38,6 +42,7 @@ class MainWindow(MainWindowUI):
         self.fileQuit = QAction("退出", self)
         self.file.addAction(self.fileCreate)
         self.file.addAction(self.fileOpen)
+        self.file.addAction(self.fileSave)
         self.file.addAction(self.fileSaveAs)
         self.file.addAction(self.fileOpenRecent)
         self.file.addAction(self.fileCloseAll)
@@ -53,27 +58,36 @@ class MainWindow(MainWindowUI):
         self.file.addSeparator()
         self.file.addAction(self.fileQuit)
 
-        edit = self.titleMenuBar.addMenu("编辑(E)")
-        editUpdo = QAction("撤销", self)
-        editRedo = QAction("重做", self)
-        editClip = QAction("剪贴", self)
-        editCopy = QAction("复制", self)
-        editPaste = QAction("粘贴", self)
-        editDelete = QAction("删除", self)
-        editSelectAll = QAction("全选", self)
-        editFind = QAction("查找", self)
-        editReplace = QAction("替换", self)
-        edit.addAction(editUpdo)
-        edit.addAction(editRedo)
-        edit.addSeparator()
-        edit.addAction(editClip)
-        edit.addAction(editCopy)
-        edit.addAction(editPaste)
-        edit.addAction(editDelete)
-        edit.addAction(editSelectAll)
-        edit.addSeparator()
-        edit.addAction(editFind)
-        edit.addAction(editReplace)
+        self.edit = self.titleMenuBar.addMenu("编辑(E)")
+        self.editUpdo = QAction("撤销", self)
+        self.editUpdo.setShortcut(QKeySequence.Undo)
+        self.editRedo = QAction("重做", self)
+        self.editRedo.setShortcut(QKeySequence.Redo)
+        self.editClip = QAction("剪贴", self)
+        self.editClip.setShortcut(QKeySequence.Cut)
+        self.editCopy = QAction("复制", self)
+        self.editCopy.setShortcut(QKeySequence.Copy)
+        self.editPaste = QAction("粘贴", self)
+        self.editPaste.setShortcut(QKeySequence.Paste)
+        self.editDelete = QAction("删除", self)
+        self.editDelete.setShortcut(QKeySequence.Delete)
+        self.editSelectAll = QAction("全选", self)
+        self.editSelectAll.setShortcut(QKeySequence.SelectAll)
+        self.editFind = QAction("查找", self)
+        self.editFind.setShortcut(QKeySequence.Find)
+        self.editReplace = QAction("替换", self)
+        self.editReplace.setShortcut(QKeySequence.Replace)
+        self.edit.addAction(self.editUpdo)
+        self.edit.addAction(self.editRedo)
+        self.edit.addSeparator()
+        self.edit.addAction(self.editClip)
+        self.edit.addAction(self.editCopy)
+        self.edit.addAction(self.editPaste)
+        self.edit.addAction(self.editDelete)
+        self.edit.addAction(self.editSelectAll)
+        self.edit.addSeparator()
+        self.edit.addAction(self.editFind)
+        self.edit.addAction(self.editReplace)
 
         self.titleMenuBar.addMenu("工具(T)")
 
@@ -114,6 +128,8 @@ class MainWindow(MainWindowUI):
             self.editorTabWidget.closeAll()
         elif text == "退出":
             self.close()
+        elif text == "保存":
+            self.editorTabWidget.saveFile()
 
     def closeEvent(self, event: QCloseEvent) -> None:
         save_state(self)

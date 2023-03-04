@@ -118,6 +118,10 @@ class EditorTabWidget(EditorTabWidgetUI):
             if widget.saveFile():
                 self.removeTab(i)
 
+    def saveFile(self):
+        widget = self.currentWidget()
+        widget.saveFile()
+
     def saveFileAs(self):
         """
         另存为
