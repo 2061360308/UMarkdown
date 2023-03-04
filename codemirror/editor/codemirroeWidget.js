@@ -124,9 +124,28 @@ function setContent(connect){
     editor.doc.setValue(connect.data);
 }
 
+//插入内容
+function insertContent(content){
+    editor.replaceSelection(content.data)
+}
+
+// 运行命令
+function execCommand(command){
+    editor.execCommand(command.data);
+}
+
+function getSelection(){
+    return editor.getSelection()
+}
+
 //更新主题
 function updateTheme(){
     changeTheme("editor/css/theme.css")
+}
+
+function replaceSelection(data){
+    let content = data.data
+    editor.replaceSelection(content)
 }
 
 //编辑器内容改变信号
@@ -135,5 +154,14 @@ editor.on("change", function(mc) {
     // 把内容交给子线程解析
     let content = mc.doc.getValue()
     PythonBridge.contentChange(content);
+    let {undo, redo} = editor.historySize()
+    console.log(undo, redo);
+
+    PythonBridge.historySizeChange(JSON.stringify([undo, redo]))
+    // console.log(editor.historySize())
 });
+
+editor.on("cursorActivity", (mc)=>{
+    PythonBridge.selectionsChange(JSON.stringify(editor.getSelections()))
+})
 

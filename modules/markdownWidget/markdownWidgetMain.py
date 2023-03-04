@@ -2,6 +2,8 @@ import os.path
 
 from PySide6.QtWidgets import QFileDialog
 
+import pyperclip
+
 from AppUMarkdown.application.modeIndex import moudelIndex
 from .ui import MarkdownWidgetUI
 
@@ -21,7 +23,10 @@ class MarkdownWidget(MarkdownWidgetUI):
     def __init__(self, parent=None):
         super(MarkdownWidget, self).__init__(parent)
 
+        self.selections = []
+
         self.codemirrorWidget.contentChangeSignal.connect(self.connectChange)
+        self.codemirrorWidget.selectionsChangeSignal.connect(self.selectionsChange)
         self.previewWidget.tocUpdateSignal.connect(self.tocUpdate)
 
     def initFile(self, **kwargs):
@@ -36,6 +41,18 @@ class MarkdownWidget(MarkdownWidgetUI):
     def connectChange(self, content):
         self.previewWidget.praseHtml(content)
         self.fileContent = content
+
+    def selectionsChange(self, selections):
+        if selections == ['']:
+            selections = []
+            moudelIndex.mainWindow.editClip.setEnabled(False)
+            moudelIndex.mainWindow.editCopy.setEnabled(False)
+            moudelIndex.mainWindow.editDelete.setEnabled(False)
+        else:
+            moudelIndex.mainWindow.editClip.setEnabled(True)
+            moudelIndex.mainWindow.editCopy.setEnabled(True)
+            moudelIndex.mainWindow.editDelete.setEnabled(True)
+        self.selections = selections
 
     def tocUpdate(self, tocHtml):
         # 更新文章的toc属性
@@ -85,5 +102,83 @@ class MarkdownWidget(MarkdownWidgetUI):
 
         else:
             return False
+
+    def commandSelectAll(self):
+        """
+        命令：全选
+        :return:
+        """
+        self.codemirrorWidget.execCommand("selectAll")
+
+    def commandUndo(self):
+        """
+        命令：撤销
+        :return:
+        """
+        self.codemirrorWidget.execCommand("undo")
+
+    def commandRedo(self):
+        """
+        命令：重做
+        :return:
+        """
+        self.codemirrorWidget.execCommand("redo")
+
+    def commandUndoSelection(self):
+        """
+        命令：撤销选择
+        :return:
+        """
+        self.codemirrorWidget.execCommand("undoSelection")
+
+    def commandRedoSelection(self):
+        """
+        命令：重做选择
+        :return:
+        """
+        self.codemirrorWidget.execCommand("redoSelection")
+
+    def commandFind(self):
+        """
+        命令：查找
+        :return:
+        """
+        self.codemirrorWidget.execCommand("find")
+
+    def commandReplace(self):
+        """
+        命令：替换
+        :return:
+        """
+        self.codemirrorWidget.execCommand("replace")
+
+    def skipTitle(self, href):
+        self.previewWidget.skipTitle(href)
+
+    def clipSelections(self):
+        if self.selections:
+            selection = self.selections
+            content = ''
+            for i in selection:
+                content = content + i
+            pyperclip.copy(content)
+            # 清空选择内容
+            self.deleteSelections()
+
+    def copySelections(self):
+        if self.selections:
+            content = ''
+            for i in self.selections:
+                content = content + i
+            pyperclip.copy(content)
+
+    def deleteSelections(self):
+        if self.selections:
+            # 清空选择内容
+            self.codemirrorWidget.clearSelectionContent()
+
+    def paste(self):
+        clipboardContent = pyperclip.paste()
+        self.codemirrorWidget.insertContent(clipboardContent)
 
 

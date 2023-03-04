@@ -6,11 +6,14 @@ from PySide6.QtWebChannel import QWebChannel
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWebEngineWidgets import QWebEngineView
 
+from AppUMarkdown.application.modeIndex import moudelIndex
+
 
 class Bridge(QObject):
     """
     python 和 Js 桥梁
     """
+
     def __init__(self, parent):
         super(Bridge, self).__init__(parent)
 
@@ -42,11 +45,34 @@ class Bridge(QObject):
         # print("内容改变事件被触发")
         self.parent().contentChangeSignal.emit(content)
 
+    @Slot(str)
+    def historySizeChange(self, data):
+        undo_num, redo_num = json.loads(data)
+        if undo_num == 0:
+            moudelIndex.mainWindow.editUndo.setEnabled(False)
+            moudelIndex.mainWindow.editSelectUndo.setEnabled(False)
+        else:
+            moudelIndex.mainWindow.editUndo.setEnabled(True)
+            moudelIndex.mainWindow.editSelectUndo.setEnabled(True)
+
+        if redo_num == 0:
+            moudelIndex.mainWindow.editRedo.setEnabled(False)
+            moudelIndex.mainWindow.editSelectRedo.setEnabled(False)
+        else:
+            moudelIndex.mainWindow.editRedo.setEnabled(True)
+            moudelIndex.mainWindow.editSelectRedo.setEnabled(True)
+
+    @Slot(str)
+    def selectionsChange(self, jsonData):
+        selections = json.loads(jsonData)
+        self.parent().selectionsChangeSignal.emit(selections)
+
 
 class CodemirrorWidget(QWebEngineView):
     """ Codemirror编辑框 """
 
     contentChangeSignal = Signal(str)
+    selectionsChangeSignal = Signal(list)
 
     loadFinishSign = False
     initLoad = False
@@ -84,3 +110,17 @@ class CodemirrorWidget(QWebEngineView):
         else:
             # 编辑器没加载完，记录下任务
             self.initLoad = True
+
+    def execCommand(self, command):
+        """
+        执行命令
+        :param command:
+        :return:
+        """
+        self.JsBridge.runJavascript("execCommand", command)
+
+    def clearSelectionContent(self):
+        self.JsBridge.runJavascript("replaceSelection", '')
+
+    def insertContent(self, content):
+        self.JsBridge.runJavascript("insertContent", content)

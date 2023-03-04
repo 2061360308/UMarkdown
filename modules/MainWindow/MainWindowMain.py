@@ -31,14 +31,14 @@ class MainWindow(MainWindowUI):
         self.fileSave = QAction("保存", self)
         self.fileSave.setShortcut(QKeySequence.Save)
         self.fileSaveAs = QAction("另存为", self)
-        self.fileOpenRecent = QAction("打开最近", self)
+        self.fileOpenRecent = QAction("打开最近(待开发)", self)
         self.fileCloseAll = QAction("关闭当前所有文件", self)
-        self.fileSettings = QAction("设置", self)
-        self.fileAttribute = QAction("文件属性", self)
-        self.fileSaveAll = QAction("全部保存", self)
-        self.fileReload = QAction("从磁盘全部重新加载", self)
-        self.fileManageSettings = QAction("管理设置文件", self)
-        self.fileSaveAsTemplate = QAction("将文件另存为模板", self)
+        self.fileSettings = QAction("设置(待开发)", self)
+        self.fileAttribute = QAction("文件属性(待开发)", self)
+        self.fileSaveAll = QAction("全部保存(待开发)", self)
+        self.fileReload = QAction("从磁盘全部重新加载(待开发)", self)
+        self.fileManageSettings = QAction("管理设置文件(待开发)", self)
+        self.fileSaveAsTemplate = QAction("将文件另存为模板(待开发)", self)
         self.fileQuit = QAction("退出", self)
         self.file.addAction(self.fileCreate)
         self.file.addAction(self.fileOpen)
@@ -59,17 +59,45 @@ class MainWindow(MainWindowUI):
         self.file.addAction(self.fileQuit)
 
         self.edit = self.titleMenuBar.addMenu("编辑(E)")
-        self.editUpdo = QAction("撤销", self)
-        self.editUpdo.setShortcut(QKeySequence.Undo)
+        self.edit.triggered[QAction].connect(self.editMenuClicked)
+        self.editInsertMenu = self.edit.addMenu("插入(待开发)")
+        self.editInsertTitle = QAction("标题")
+        self.editInsertPicture = QAction("图片")
+        self.editInsertLink = QAction("链接")
+        self.editInsertCode = QAction("代码段")
+        self.editInsertQuote = QAction("引用")
+        self.editInsertTodo = QAction("待办列表")
+        self.editInsertOrder = QAction("有序列表")
+        self.editInsertUnorder = QAction("无序列表")
+        self.editInsertMenu.addAction(self.editInsertTitle)
+        self.editInsertMenu.addAction(self.editInsertPicture)
+        self.editInsertMenu.addAction(self.editInsertLink)
+        self.editInsertMenu.addAction(self.editInsertCode)
+        self.editInsertMenu.addAction(self.editInsertQuote)
+        self.editInsertMenu.addAction(self.editInsertTodo)
+        self.editInsertMenu.addAction(self.editInsertOrder)
+        self.editInsertMenu.addAction(self.editInsertUnorder)
+        # self.edit.
+        self.editUndo = QAction("撤销", self)
+        self.editUndo.setEnabled(False)
+        self.editUndo.setShortcut(QKeySequence.Undo)
         self.editRedo = QAction("重做", self)
+        self.editRedo.setEnabled(False)
         self.editRedo.setShortcut(QKeySequence.Redo)
+        self.editSelectUndo = QAction("撤销选择", self)
+        self.editSelectUndo.setEnabled(False)
+        self.editSelectRedo = QAction("重做选择", self)
+        self.editSelectRedo.setEnabled(False)
         self.editClip = QAction("剪贴", self)
+        self.editClip.setEnabled(False)
         self.editClip.setShortcut(QKeySequence.Cut)
         self.editCopy = QAction("复制", self)
+        self.editCopy.setEnabled(False)
         self.editCopy.setShortcut(QKeySequence.Copy)
         self.editPaste = QAction("粘贴", self)
         self.editPaste.setShortcut(QKeySequence.Paste)
         self.editDelete = QAction("删除", self)
+        self.editDelete.setEnabled(False)
         self.editDelete.setShortcut(QKeySequence.Delete)
         self.editSelectAll = QAction("全选", self)
         self.editSelectAll.setShortcut(QKeySequence.SelectAll)
@@ -77,8 +105,11 @@ class MainWindow(MainWindowUI):
         self.editFind.setShortcut(QKeySequence.Find)
         self.editReplace = QAction("替换", self)
         self.editReplace.setShortcut(QKeySequence.Replace)
-        self.edit.addAction(self.editUpdo)
+        # self.edit.addAction(self.editAdd)
+        self.edit.addAction(self.editUndo)
         self.edit.addAction(self.editRedo)
+        self.edit.addAction(self.editSelectUndo)
+        self.edit.addAction(self.editSelectRedo)
         self.edit.addSeparator()
         self.edit.addAction(self.editClip)
         self.edit.addAction(self.editCopy)
@@ -98,7 +129,15 @@ class MainWindow(MainWindowUI):
         theme.addAction(themeUI)
         theme.addAction(themePreview)
 
-        self.titleMenuBar.addMenu("帮助(H)")
+        self.help = self.titleMenuBar.addMenu("帮助(H)")
+        self.helpGithub = QAction("UMarkdown Github主页")
+        self.helpAuthorCSDN = QAction("作者的CSDN主页")
+        self.helpAuthorBlog = QAction("作者的Blog小站")
+        self.help.addAction(self.helpGithub)
+        self.help.addAction(self.helpAuthorCSDN)
+        self.help.addAction(self.helpAuthorBlog)
+
+        self.tocWidget.tocClickedSignal.connect(self.tocTitleClicked)
 
     def themeClicked(self, action: QAction):
         text = action.text()
@@ -130,6 +169,34 @@ class MainWindow(MainWindowUI):
             self.close()
         elif text == "保存":
             self.editorTabWidget.saveFile()
+
+    def editMenuClicked(self, action: QAction):
+        text = action.text()
+        if text == "撤销":
+            self.editorTabWidget.currentWidget().commandUndo()
+        elif text == "重做":
+            self.editorTabWidget.currentWidget().commandRedo()
+        elif text == "撤销选择":
+            self.editorTabWidget.currentWidget().commandUndoSelection()
+        elif text == "重做选择":
+            self.editorTabWidget.currentWidget().commandRedoSelection()
+        elif text == "剪贴":
+            self.editorTabWidget.currentWidget().clipSelections()
+        elif text == "复制":
+            self.editorTabWidget.currentWidget().copySelections()
+        elif text == "粘贴":
+            self.editorTabWidget.currentWidget().paste()
+        elif text == "删除":
+            self.editorTabWidget.currentWidget().deleteSelections()
+        elif text == "全选":
+            self.editorTabWidget.currentWidget().commandSelectAll()
+        elif text == "查找":
+            self.editorTabWidget.currentWidget().commandFind()
+        elif text == "替换":
+            self.editorTabWidget.currentWidget().commandReplace()
+
+    def tocTitleClicked(self, href):
+        self.editorTabWidget.currentWidget().skipTitle(href)
 
     def closeEvent(self, event: QCloseEvent) -> None:
         save_state(self)

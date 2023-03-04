@@ -185,3 +185,8 @@ function prase(content){
     // console.log(data3-data1, data2-data1, data3-data2)  //总用时，解析用时，渲染用时
     return JSON.stringify({data:tocHtml});
 }
+
+
+function skipTitle(data){
+    location.href = data.data;
+}

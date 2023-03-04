@@ -72,4 +72,11 @@ function changeTheme(stylesheetFile) {
 function updateToc(toc){
     console.log(toc);
     tocEml.innerHTML = toc.data;
+    console.log(document.getElementsByTagName('a'));
+    let aTags = document.getElementsByTagName('a');
+    for (let aTag of aTags) {
+        aTag.onclick = ()=>{
+            PythonBridge.titleClicked(aTag.href)
+        }
+    }
 }

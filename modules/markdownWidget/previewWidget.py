@@ -76,3 +76,6 @@ class PreviewWidget(QWebEngineView):
         :return:
         """
         self.tocUpdateSignal.emit(json.loads(tocHtml)['data'])
+
+    def skipTitle(self, href):
+        self.JsBridge.runJavascript("skipTitle", href)

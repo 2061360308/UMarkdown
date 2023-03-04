@@ -1,6 +1,6 @@
 import json
 
-from PySide6.QtCore import QObject
+from PySide6.QtCore import QObject, Slot, Signal
 from PySide6.QtWebChannel import QWebChannel
 
 from .ui import TocWidgetUI
@@ -24,8 +24,15 @@ class Bridge(QObject):
         else:
             self.page.runJavaScript("%s(%s)" % (fun, json.dumps(data)), 0, js_callback)
 
+    @Slot(str)
+    def titleClicked(self, href):
+        href = href.replace('file:///codemirror/TocWidget.html', '')
+        self.parent().tocClickedSignal.emit(href)
+
 
 class TocWidget(TocWidgetUI):
+
+    tocClickedSignal = Signal(str)
     def __init__(self, parent):
         super(TocWidget, self).__init__(parent)
 
@@ -35,5 +42,4 @@ class TocWidget(TocWidgetUI):
         channel.registerObject("Bridge", self.JsBridge)  # 注册，js通过pythonBridge调用
 
     def updateToc(self, tocHtml: str):
-
         self.JsBridge.runJavascript("updateToc", tocHtml)

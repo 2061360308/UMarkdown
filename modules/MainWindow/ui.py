@@ -27,6 +27,7 @@ class MainWindowUI(QMainWindow):
         self.tocWidget = None
         self.editorTabWidget = None
         self.moudelIndex = moudelIndex
+        self.moudelIndex.mainWindow = self
         self.titleMenuBar = None
         self.stackedW = None
         self.splitter = None
