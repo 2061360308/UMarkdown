@@ -20,6 +20,8 @@ class MarkdownWidget(MarkdownWidgetUI):
 
     changeMark = None  # 改动标识
 
+    lastState = None  # 上次分配状态
+
     def __init__(self, parent=None):
         super(MarkdownWidget, self).__init__(parent)
 
@@ -53,6 +55,23 @@ class MarkdownWidget(MarkdownWidgetUI):
             moudelIndex.mainWindow.editCopy.setEnabled(True)
             moudelIndex.mainWindow.editDelete.setEnabled(True)
         self.selections = selections
+
+    def updateLastState(self):
+        """
+        更新最新的分配状态
+        :return:
+        """
+        self.lastState = self.saveState()
+
+    def restoreLastState(self):
+        """
+        恢复上次的状态
+        :return:
+        """
+        if self.lastState:
+            self.restoreState(self.lastState)
+        else:
+            self.setSizes([1, 1])
 
     def tocUpdate(self, tocHtml):
         # 更新文章的toc属性
@@ -177,11 +196,25 @@ class MarkdownWidget(MarkdownWidgetUI):
             # 清空选择内容
             self.codemirrorWidget.clearSelectionContent()
 
+    def changeSelectionContent(self, n_text: str):
+        """
+        更改选中的内容
+        :param n_text: 新的内容
+        :return:
+        """
+        self.codemirrorWidget.changeSelectionContent(n_text)
+
+    def insertContent(self, content):
+        """
+        当前光标位置插入内容
+        :param content: 新的内容
+        :return:
+        """
+        self.codemirrorWidget.insertContent(content)
+
     def paste(self):
         clipboardContent = pyperclip.paste()
         self.codemirrorWidget.insertContent(clipboardContent)
 
     def setVimMode(self, p: bool):
         self.codemirrorWidget.setVimMode(p)
-
-

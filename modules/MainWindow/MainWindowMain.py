@@ -60,7 +60,7 @@ class MainWindow(MainWindowUI):
 
         self.edit = self.titleMenuBar.addMenu("编辑(E)")
         self.edit.triggered[QAction].connect(self.editMenuClicked)
-        self.editInsertMenu = self.edit.addMenu("插入(待开发)")
+        self.editInsertMenu = self.edit.addMenu("插入")
         self.editInsertTitle = QAction("标题")
         self.editInsertPicture = QAction("图片")
         self.editInsertLink = QAction("链接")
@@ -194,6 +194,157 @@ class MainWindow(MainWindowUI):
             self.editorTabWidget.currentWidget().commandFind()
         elif text == "替换":
             self.editorTabWidget.currentWidget().commandReplace()
+        elif text == "标题":
+            widget = self.editorTabWidget.currentWidget()
+            if widget.selections:
+                selection = widget.selections[0]
+
+                if selection.startswith("# "):
+                    widget.changeSelectionContent(selection[2:])
+                else:
+                    widget.changeSelectionContent("# " + selection)
+            else:
+                widget.insertContent("# ")
+        elif text == "图片":
+            widget = self.editorTabWidget.currentWidget()
+            if widget.selections:
+                selection = widget.selections[0]
+
+                widget.changeSelectionContent("![" + selection+"]()")
+            else:
+                widget.insertContent("![]()")
+        elif text == "链接":
+            widget = self.editorTabWidget.currentWidget()
+            if widget.selections:
+                selection = widget.selections[0]
+
+                widget.changeSelectionContent("[" + selection + "]()")
+            else:
+                widget.insertContent("[]()")
+        elif text == "代码段":
+            widget = self.editorTabWidget.currentWidget()
+            if widget.selections:
+                selection = widget.selections[0]
+
+                widget.changeSelectionContent("```\n" + selection + "\n```")
+            else:
+                widget.insertContent("```\n```")
+        elif text == "引用":
+            widget = self.editorTabWidget.currentWidget()
+            if widget.selections:
+                selection = widget.selections[0]
+
+                if selection.startswith("> "):
+                    widget.changeSelectionContent(selection[2:])
+                else:
+                    widget.changeSelectionContent("> " + selection)
+            else:
+                widget.insertContent("> ")
+        elif text == "待办列表":
+            widget = self.editorTabWidget.currentWidget()
+            if widget.selections:
+                selection = widget.selections[0]
+
+                itemList = selection.split("\n")
+
+                # 判断是否是标准形式
+
+                standFormat = True
+
+                for i in itemList:
+                    if i.startswith("- [ ] ") or i.startswith("- [x] "):
+                        continue
+                    else:
+                        standFormat = False
+                        break
+
+                n_text = ""
+
+                if standFormat:  # 是标准型，给他恢复为普通文本
+                    for i in itemList:
+                        n_text = n_text + i[6:] + "\n"
+                else:  # 不是标准型，更改为标准格式
+                    for i in itemList:
+                        if i.startswith("- [ ] ") or i.startswith("- [x] "):
+                            n_text = n_text + i + "\n"
+                        else:
+                            n_text = n_text + "- [ ] " + i + "\n"
+
+                widget.changeSelectionContent(n_text[:-1])
+            else:
+                widget.insertContent("- [ ] ")
+
+        elif text == "无序列表":
+            widget = self.editorTabWidget.currentWidget()
+            if widget.selections:
+                selection = widget.selections[0]
+
+                itemList = selection.split("\n")
+
+                # 判断是否是标准形式
+
+                standFormat = True
+
+                for i in itemList:
+                    if i.startswith("- "):
+                        continue
+                    else:
+                        standFormat = False
+                        break
+
+                n_text = ""
+
+                if standFormat:  # 是标准型，给他恢复为普通文本
+                    for i in itemList:
+                        n_text = n_text + i[2:] + "\n"
+                else:  # 不是标准型，更改为标准格式
+                    for i in itemList:
+                        if i.startswith("- "):
+                            n_text = n_text + i + "\n"
+                        else:
+                            n_text = n_text + "- " + i + "\n"
+
+                widget.changeSelectionContent(n_text[:-1])
+            else:
+                widget.insertContent("- ")
+        elif text == "有序列表":
+            widget = self.editorTabWidget.currentWidget()
+            if widget.selections:
+                selection = widget.selections[0]
+
+                itemList = selection.split("\n")
+
+                # 判断是否是标准形式
+
+                standFormat = True
+
+                j = 0
+                for i in itemList:
+                    j = j + 1
+                    if i.startswith("%s. " % j):
+                        continue
+                    else:
+                        standFormat = False
+                        break
+
+                n_text = ""
+
+                if standFormat:  # 是标准型，给他恢复为普通文本
+                    for i in itemList:
+                        n_text = n_text + i[3:] + "\n"
+                else:  # 不是标准型，更改为标准格式
+                    j = 0
+                    for i in itemList:
+                        j = j + 1
+                        if i.startswith("%s. " % j):
+                            n_text = n_text + i + "\n"
+                        else:
+                            n_text = n_text + "%s. " % j + i + "\n"
+
+                widget.changeSelectionContent(n_text[:-1])
+            else:
+                widget.insertContent("1. ")
+
 
     def tocTitleClicked(self, href):
         self.editorTabWidget.currentWidget().skipTitle(href)

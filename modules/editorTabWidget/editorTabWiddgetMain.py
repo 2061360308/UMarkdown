@@ -176,3 +176,26 @@ class EditorTabWidget(EditorTabWidgetUI):
             widget = self.widget(i)
             widget.setVimMode(p)
 
+    def preview(self):
+        """
+        进入预览模式
+        :return:
+        """
+        widget = self.currentWidget()
+        widget.updateLastState()
+        widget.setSizes([0, 1])
+        # for i in range(self.count()):
+        #     widget = self.widget(i)
+        #     widget.setSizes([0, 1])
+
+    def edited(self):
+        """
+        进入编辑模式
+        :return:
+        """
+        widget = self.currentWidget()
+        widget.restoreLastState()
+        # for i in range(self.count()):
+        #     widget = self.widget(i)
+        #     widget.setSizes([1, 1])
+

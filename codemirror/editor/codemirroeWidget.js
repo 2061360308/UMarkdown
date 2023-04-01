@@ -138,6 +138,7 @@ function getSelection(){
     return editor.getSelection()
 }
 
+// 更改 KeyMap
 function changeKeyMap(keyMap){
     editor.setOption("keyMap", keyMap.data);
 }
@@ -165,6 +166,8 @@ editor.on("change", function(mc) {
     // console.log(editor.historySize())
 });
 
+
+// 编辑器选择更改
 editor.on("cursorActivity", (mc)=>{
     PythonBridge.selectionsChange(JSON.stringify(editor.getSelections()))
 })

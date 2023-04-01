@@ -125,6 +125,9 @@ class CodemirrorWidget(QWebEngineView):
     def clearSelectionContent(self):
         self.JsBridge.runJavascript("replaceSelection", '')
 
+    def changeSelectionContent(self, n_text: str):
+        self.JsBridge.runJavascript("replaceSelection", n_text)
+
     def insertContent(self, content):
         self.JsBridge.runJavascript("insertContent", content)
 
