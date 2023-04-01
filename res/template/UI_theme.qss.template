@@ -77,6 +77,21 @@ QSplitter::handle:pressed{{
     background-color:#<transparency_16><QTMATERIAL_SECONDARYLIGHTCOLOR[1:]>;
 }}
 
+#vimModeButton {{
+  color: {QTMATERIAL_PRIMARYCOLOR};
+  font
+  border: 2px solid {QTMATERIAL_PRIMARYCOLOR};
+  border-radius: 4px;
+  height: 36px;
+
+  text-transform: uppercase;
+  margin: 0px;
+  padding: 1px 16px;
+  height: 36px;
+  font-weight: bold;
+  border-radius: 4px;
+}}
+
 {# 工具栏按钮
 /* tagsButton */
 #tagsButton:checked{{

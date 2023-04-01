@@ -16,7 +16,7 @@ class StatusBarUI(QStatusBar):
         self.button_widget_size = QSize(self.height() - 6, self.height() - 6)
 
         # 左边按钮
-        self.tagsButton = QRadioButton(self)
+        self.tagsButton = QCheckBox(self)
         self.tagsButton.setObjectName("tagsButton")
         self.tagsButton.setProperty("class", "iconfontW")
         self.tagsButton.setCheckable(True)
@@ -24,6 +24,14 @@ class StatusBarUI(QStatusBar):
         self.tagsButton.setToolTip("组织结构")
         self.tagsButton.setStyleSheet("font-size:15px")
         self.addWidget(self.tagsButton)
+
+        # 右侧按钮
+
+        self.vimModeButton = QCheckBox(self)
+        self.vimModeButton.setObjectName("vimModeButton")
+        self.vimModeButton.setText('vim')
+        self.vimModeButton.setToolTip("vim编辑模式")
+        self.addPermanentWidget(self.vimModeButton)
 
         self.lineSeparatorButton = QPushButton(self)
         self.lineSeparatorButton.setFlat(True)

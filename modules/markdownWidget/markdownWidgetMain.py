@@ -181,4 +181,7 @@ class MarkdownWidget(MarkdownWidgetUI):
         clipboardContent = pyperclip.paste()
         self.codemirrorWidget.insertContent(clipboardContent)
 
+    def setVimMode(self, p: bool):
+        self.codemirrorWidget.setVimMode(p)
+
 

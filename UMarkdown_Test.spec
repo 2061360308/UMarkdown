@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# 正式打包配置，也就关闭了命令行
+# 测试打包配置，显示命令行
 
 block_cipher = None
 
@@ -31,7 +31,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

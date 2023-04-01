@@ -103,6 +103,16 @@ class EditorTabWidget(EditorTabWidgetUI):
 
         self.setCurrentWidget(widget)
 
+    def registerHistory(self, path):
+        """
+        注册历史记录,
+        :param path: 文件的路径
+        :return:
+        """
+
+        if os.path.isfile("AppUMarkdown/config/history.ini"):
+            pass
+
     def tabCloseClicked(self, index):
         widget = self.widget(index)
         if widget.saveFile():
@@ -155,3 +165,14 @@ class EditorTabWidget(EditorTabWidgetUI):
         :return:
         """
         self.openFabricateFile("未命名.md", "UTF-8", "")
+
+    def setVimMode(self, p: bool):
+        """
+        设置vim模式
+        :param p: ture开启， false 关闭
+        :return:
+        """
+        for i in range(self.count()):
+            widget = self.widget(i)
+            widget.setVimMode(p)
+

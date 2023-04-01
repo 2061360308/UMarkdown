@@ -138,6 +138,10 @@ function getSelection(){
     return editor.getSelection()
 }
 
+function changeKeyMap(keyMap){
+    editor.setOption("keyMap", keyMap.data);
+}
+
 //更新主题
 function updateTheme(){
     changeTheme("editor/css/theme.css")

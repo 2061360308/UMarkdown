@@ -13,6 +13,8 @@ class StatusBar(StatusBarUI):
     def init(self):
         self.tagsButton.clicked.connect(self.tagsButtonClicked)
 
+        self.vimModeButton.clicked.connect(self.vimModeButtonClicked)
+
     def tagsButtonClicked(self):
         if self.tagsButton.isChecked():
             self.tagsButton.setText(chr(0xe6f6))
@@ -26,3 +28,13 @@ class StatusBar(StatusBarUI):
         else:
             moudelIndex.stackedW.hide()
             self.tagsButton.setText(chr(0xe6f5))
+
+    def vimModeButtonClicked(self):
+        """
+        vim模式button被点击
+        :return:
+        """
+        if self.vimModeButton.isChecked():
+            moudelIndex.editorTabWidget.setVimMode(True)
+        else:
+            moudelIndex.editorTabWidget.setVimMode(False)

@@ -14,8 +14,8 @@
 
 :root {
     --center-splitter-width: 20px;
-    --QTMATERIAL_PRIMARYCOLOR: #8bc34a; /* 主色 */
-    --QTMATERIAL_PRIMARYLIGHTCOLOR: #bef67a; /* 亮主色 */
+    --QTMATERIAL_PRIMARYCOLOR: #ffd740; /* 主色 */
+    --QTMATERIAL_PRIMARYLIGHTCOLOR: #ffff74; /* 亮主色 */
     --QTMATERIAL_SECONDARYCOLOR: #232629; /* 次要颜色 */
     --QTMATERIAL_SECONDARYLIGHTCOLOR: #4f5b62; /* 亮次要颜色 */
     --QTMATERIAL_SECONDARYDARKCOLOR: #31363b; /* 暗主色 */

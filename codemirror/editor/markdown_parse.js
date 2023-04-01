@@ -16,6 +16,7 @@ rendererMD.heading = function (text, level, raw) {
 //将链接重定向到本地后端服务
 rendererMD.image = function(href, title, text) {
     return `<img src="http://127.0.0.1:5000?href=${href}" alt="${text}" title="${title ? title : ''}">`
+    // return `<img src="href=${href}" alt="${text}" title="${title ? title : ''}">`
 }
 
 marked.setOptions({

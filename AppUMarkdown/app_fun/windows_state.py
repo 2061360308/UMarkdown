@@ -10,6 +10,7 @@ def save_state(mainwindow: QMainWindow):
     appQSettings.setValue("Maximized", mainwindow.isMaximized())
     appQSettings.setValue("SplitterState", mainwindow.splitter.saveState())
     appQSettings.setValue("SplitterHidden", mainwindow.stackedW.isHidden())
+    appQSettings.setValue("vimMode", mainwindow.statusBarW.vimModeButton.isChecked())
     appQSettings.endGroup()
 
 
@@ -26,4 +27,10 @@ def load_state(mainwindow: QMainWindow):
         mainwindow.statusBarW.tagsButton.setChecked(True)
         mainwindow.statusBarW.tagsButton.setText(chr(0xe6f6))
     mainwindow.splitter.restoreState(appQSettings.value("SplitterState"))
+
+    if appQSettings.value("vimMode") == "true":
+        mainwindow.statusBarW.vimModeButton.setChecked(True)
+    else:
+        mainwindow.statusBarW.vimModeButton.setChecked(False)
+
     appQSettings.endGroup()

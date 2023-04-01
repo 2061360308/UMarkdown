@@ -54,6 +54,8 @@ class PreviewWidget(QWebEngineView):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.page().settings().setAttribute(QWebEngineSettings.ShowScrollBars, True)  # 启用滚动条
         self.page().settings().setAttribute(QWebEngineSettings.AutoLoadIconsForPage, False)  # 不自动下载网页图标
+        self.page().settings().setAttribute(QWebEngineSettings.AllowRunningInsecureContent, True)  # run JavaScript, CSS, plugins or web-sockets from HTTP URLs.
+        self.page().settings().setAttribute(QWebEngineSettings.LocalContentCanAccessRemoteUrls, True)  # 允许本地url访问外部url
         self.page().setBackgroundColor(QColor(0, 0, 0, 0))
         self.setUrl(QUrl("file:///%s" % "codemirror/PreviewWidget.html"))
         # self.setUrl(QUrl("file:///%s" % "codemirror/MarkdownEditor.html"))

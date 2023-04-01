@@ -7,6 +7,7 @@ from PySide6.QtWebEngineCore import QWebEngineSettings
 from PySide6.QtWebEngineWidgets import QWebEngineView
 
 from AppUMarkdown.application.modeIndex import moudelIndex
+from AppUMarkdown import appQSettings
 
 
 class Bridge(QObject):
@@ -39,6 +40,8 @@ class Bridge(QObject):
         self.parent().loadFinishSign = True
         if self.parent().initLoad:
             self.runJavascript("setContent", self.parent().getContent())
+        if appQSettings.value("MainWindowState/vimMode") == "true":
+            self.parent().setVimMode(moudelIndex.mainWindow.statusBarW.vimModeButton.isChecked())
 
     @Slot(str)
     def contentChange(self, content):
@@ -124,3 +127,9 @@ class CodemirrorWidget(QWebEngineView):
 
     def insertContent(self, content):
         self.JsBridge.runJavascript("insertContent", content)
+
+    def setVimMode(self, p: bool):
+        if p:
+            self.JsBridge.runJavascript("changeKeyMap", "vim")
+        else:
+            self.JsBridge.runJavascript("changeKeyMap", "default")

@@ -1,3 +1,5 @@
+// 预览界面的js，主要负责解析markdown
+
 function resize() {
     let widgetWidth = document.documentElement.clientWidth;
     preview.setAttribute("style", "width:" + widgetWidth.toString() + "px;")
@@ -53,7 +55,17 @@ function initMarked() {
 
     //将链接重定向到本地后端服务
     rendererMD.image = function (href, title, text) {
-        return `<img src="http://127.0.0.1:5000?href=${href}" alt="${text}" title="${title ? title : ''}">`
+        // return `<img src="http://127.0.0.1:5000?href=${href}" alt="${text}" title="${title ? title : ''}">`
+        if(href.startsWith("http://")||href.startsWith("https://")){
+            return `<img src="${href}" alt="${text}" title="${title ? title : ''}">`
+        }else {
+
+            /*
+            * 这里应该添加相对引用的判断
+            *  */
+
+            return `<img src="file:///${href}" alt="${text}" title="${title ? title : ''}">`
+        }
     }
 
     marked.setOptions({
