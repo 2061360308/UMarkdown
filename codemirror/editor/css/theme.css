@@ -14,8 +14,8 @@
 
 :root {
     --center-splitter-width: 20px;
-    --QTMATERIAL_PRIMARYCOLOR: #ffd740; /* 主色 */
-    --QTMATERIAL_PRIMARYLIGHTCOLOR: #ffff74; /* 亮主色 */
+    --QTMATERIAL_PRIMARYCOLOR: #4dd0e1; /* 主色 */
+    --QTMATERIAL_PRIMARYLIGHTCOLOR: #88ffff; /* 亮主色 */
     --QTMATERIAL_SECONDARYCOLOR: #232629; /* 次要颜色 */
     --QTMATERIAL_SECONDARYLIGHTCOLOR: #4f5b62; /* 亮次要颜色 */
     --QTMATERIAL_SECONDARYDARKCOLOR: #31363b; /* 暗主色 */
@@ -165,3 +165,5 @@ body,html{
 .cm-s-dracula span.cm-builtin {color: #896724;}
 /* */
 .cm-s-dracula span.cm-type {color: #896724;}
+
+.markdown-img{max-width: 100%}

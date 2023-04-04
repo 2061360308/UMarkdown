@@ -136,3 +136,6 @@ class CodemirrorWidget(QWebEngineView):
             self.JsBridge.runJavascript("changeKeyMap", "vim")
         else:
             self.JsBridge.runJavascript("changeKeyMap", "default")
+
+    def setReadOnly(self, on: bool):
+        self.JsBridge.runJavascript("setReadOnly", on)

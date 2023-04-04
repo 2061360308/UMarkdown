@@ -143,6 +143,19 @@ function changeKeyMap(keyMap){
     editor.setOption("keyMap", keyMap.data);
 }
 
+// 更改换行符
+
+
+// 更改tab键对应空格个数
+function changeTabindex(num){
+    editor.setOption("tabindex", num.data);
+}
+
+//只读开关
+function setReadOnly(on){
+    editor.setOption("readOnly", on.data);
+}
+
 //更新主题
 function updateTheme(){
     changeTheme("editor/css/theme.css")

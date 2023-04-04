@@ -1,0 +1,10 @@
+# Ignore all
+*
+# Except
+!.gitignore
+!refine.css
+!Refine.png
+!Sample-titles.png
+!Sample-blockquote.png
+!Sample-codeblock.png
+!Sample-checklist.png

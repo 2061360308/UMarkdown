@@ -1,5 +1,7 @@
 // 预览界面的js，主要负责解析markdown
 
+filePath = "";
+
 function resize() {
     let widgetWidth = document.documentElement.clientWidth;
     preview.setAttribute("style", "width:" + widgetWidth.toString() + "px;")
@@ -53,18 +55,20 @@ function initMarked() {
         return `<a id=${anchor} class="anchor-fix"></a><h${level}>${text}</h${level}>\n`;
     };
 
-    //将链接重定向到本地后端服务
+    //处理网络链接，本地绝对链接，和相对链接
     rendererMD.image = function (href, title, text) {
         // return `<img src="http://127.0.0.1:5000?href=${href}" alt="${text}" title="${title ? title : ''}">`
-        if(href.startsWith("http://")||href.startsWith("https://")){
-            return `<img src="${href}" alt="${text}" title="${title ? title : ''}">`
+        if(href.startsWith("http://")||href.startsWith("https://")) {
+            return `<img src="${href}" class="markdown-img" alt="${text}" title="${title ? title : ''}">`
+        }else if(href.startsWith("./")||href.startsWith("../")){
+            return `<img src="file:///${filePath}/${href}" class="markdown-img" alt="${text}" title="${title ? title : ''}">`
         }else {
 
             /*
             * 这里应该添加相对引用的判断
             *  */
 
-            return `<img src="file:///${href}" alt="${text}" title="${title ? title : ''}">`
+            return `<img src="file:///${href}" alt="${text}" class="markdown-img" title="${title ? title : ''}">`
         }
     }
 
@@ -185,6 +189,53 @@ function changeTheme(stylesheetFile) {
     loadStyles(stylesheetFile)
 }
 
+
+function changePreviewTheme(oldStylesheetFile, newStylesheetFile) {
+    /*
+    * 更改预览界面的主题
+    * stylesheetFile: css文件路径
+    * */
+    function removeStyles(file) {
+        let filename = file;
+        let targetelement = "link";
+        let targetattr = "href";
+        let allsuspects = document.getElementsByTagName(targetelement);
+        for (let i = allsuspects.length; i >= 0; i--) {
+            if (allsuspects[i] && allsuspects[i].getAttribute(targetattr) != null && allsuspects[i].getAttribute(
+                targetattr).indexOf(filename) !== -1) {
+                allsuspects[i].parentNode.removeChild(allsuspects[i]);
+            }
+        }
+    }
+
+    function loadStyles(file) {
+        let headElm = document.getElementsByTagName("head")[0];
+        let fileref = document.createElement("link");
+        fileref.setAttribute("rel", "stylesheet");
+        fileref.setAttribute("type", "text/css");
+        fileref.setAttribute("href", file);
+        headElm.appendChild(fileref);
+    }
+
+    removeStyles(oldStylesheetFile)
+    loadStyles(newStylesheetFile)
+}
+
+//更新主题(其实没必要这里只是用了个滚动条的样式而已)
+function updateTheme(){
+    changeTheme("editor/css/theme.css")
+}
+
+// 更新预览主题
+function updatePreviewTheme(data){
+    console.log(data.data)
+    changePreviewTheme(data.data[0], data.data[1])
+}
+
+function setFilePath(path){
+    filePath = path.data;
+}
+
 function prase(content){
     // let data1 = new Date().getTime();
     content = marked(content.data);
@@ -195,7 +246,7 @@ function prase(content){
     preview_inner.innerHTML = content;
     // let data3 = new Date().getTime();
     // console.log(data3-data1, data2-data1, data3-data2)  //总用时，解析用时，渲染用时
-    return JSON.stringify({data:tocHtml});
+    return JSON.stringify({toc:tocHtml, previewHtml:content});
 }
 
 

@@ -1,8 +1,10 @@
+import json
 import os.path
 
 import chardet
 from PySide6.QtWidgets import QWidget
 
+from AppUMarkdown import appQSettings
 from AppUMarkdown.application.modeIndex import moudelIndex
 from .ui import EditorTabWidgetUI
 from modules.markdownWidget import MarkdownWidget
@@ -13,6 +15,7 @@ class EditorTabWidget(EditorTabWidgetUI):
         super(EditorTabWidget, self).__init__(parent)
 
         self.tabCloseRequested.connect(self.tabCloseClicked)
+        self.currentChanged.connect(self.currentTabChanged)
         self.tabNumChange()
 
     def updateTheme(self):
@@ -30,6 +33,21 @@ class EditorTabWidget(EditorTabWidgetUI):
                 widget = self.widget(i)
                 widget.updateTheme()
 
+    def updatePreviewTheme(self, old, new):
+        """
+        更新预览主题
+        :return:
+        """
+        # 先更新当前显示文档的，然后依次更新
+        if self.currentWidget() is None:
+            return
+        self.currentWidget().updatePreviewTheme(old, new)
+        currentIndex = self.currentIndex()
+        for i in range(self.count()):
+            if i != currentIndex:
+                widget = self.widget(i)
+                widget.updatePreviewTheme(old, new)
+
     def addTab(self, widget: QWidget, arg__2: str) -> int:
         super(EditorTabWidget, self).addTab(widget, arg__2)
         self.tabNumChange()
@@ -37,6 +55,30 @@ class EditorTabWidget(EditorTabWidgetUI):
     def removeTab(self, index: int) -> None:
         super(EditorTabWidget, self).removeTab(index)
         self.tabNumChange()
+
+    def currentTabChanged(self, index: int) -> None:
+        """
+        当前tab改变
+        :param index:
+        :return:
+        """
+        widget = self.widget(index)
+        widget.tocUpdate()
+
+        readOnly = widget.readOnly
+        if hasattr(moudelIndex, "statusBarW"):
+            moudelIndex.statusBarW.updateReadOnlyButton(readOnly)
+
+    def updateReadOnly(self):
+        """
+        更新只读模式状态
+        :return:
+        """
+
+        widget = self.currentWidget()
+        readOnly = widget.updateReadOnly()
+
+        moudelIndex.statusBarW.updateReadOnlyButton(readOnly)
 
     def openFile(self, filePath):
         """
@@ -52,6 +94,7 @@ class EditorTabWidget(EditorTabWidgetUI):
         with open(filePath, 'rb') as f:
             contentR = f.read()
             fileEncoding = chardet.detect(contentR)['encoding']  # 检测文件内容
+            print(fileEncoding)
         if fileEncoding is None:
             fileEncoding = "UTF-8"
         fileContent = contentR.decode(encoding=fileEncoding)
@@ -110,13 +153,31 @@ class EditorTabWidget(EditorTabWidgetUI):
         :return:
         """
 
-        if os.path.isfile("AppUMarkdown/config/history.ini"):
-            pass
+        appQSettings.beginGroup("History")
+        recentFiles = appQSettings.value("recentFiles")
+
+        if recentFiles is None:
+            appQSettings.setValue("recentFiles", json.dumps([path]))
+        else:
+            recentFiles = json.loads(recentFiles)
+
+            if path in recentFiles:
+                recentFiles.remove(path)
+
+            recentFiles.insert(0, path)
+            appQSettings.setValue("recentFiles", json.dumps(recentFiles))
+        appQSettings.endGroup()
+
+        moudelIndex.mainWindow.updateRecentFilesMenu(recentFiles)
+
+        # 更新最近列表
 
     def tabCloseClicked(self, index):
         widget = self.widget(index)
+        path = widget.filePath
         if widget.saveFile():
             self.removeTab(index)
+            self.registerHistory(path)
 
     def closeAll(self):
         """
@@ -131,6 +192,15 @@ class EditorTabWidget(EditorTabWidgetUI):
     def saveFile(self):
         widget = self.currentWidget()
         widget.saveFile()
+
+    def saveFileAll(self):
+        """
+        保存所有文件
+        :return:
+        """
+        for i in range(self.count()):
+            widget = self.widget(i)
+            widget.saveFile()
 
     def saveFileAs(self):
         """
@@ -198,4 +268,3 @@ class EditorTabWidget(EditorTabWidgetUI):
         # for i in range(self.count()):
         #     widget = self.widget(i)
         #     widget.setSizes([1, 1])
-

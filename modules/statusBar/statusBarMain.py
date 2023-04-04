@@ -14,6 +14,7 @@ class StatusBar(StatusBarUI):
         self.tagsButton.clicked.connect(self.tagsButtonClicked)
 
         self.vimModeButton.clicked.connect(self.vimModeButtonClicked)
+        self.readOnlyButton.clicked.connect(self.readOnlyButtonClicked)
 
     def tagsButtonClicked(self):
         if self.tagsButton.isChecked():
@@ -38,3 +39,23 @@ class StatusBar(StatusBarUI):
             moudelIndex.editorTabWidget.setVimMode(True)
         else:
             moudelIndex.editorTabWidget.setVimMode(False)
+
+    def readOnlyButtonClicked(self):
+        """
+        只读模式按钮点击
+        :return:
+        """
+        moudelIndex.editorTabWidget.updateReadOnly()
+
+    def updateReadOnlyButton(self, on: bool):
+        """
+        更新只读模式按钮的状态
+        :param on: 参数
+        :return:
+        """
+        if on:
+            self.readOnlyButton.setText(chr(0xe67a))
+            self.readOnlyButton.setToolTip("只读模式")
+        else:
+            self.readOnlyButton.setText(chr(0xe678))
+            self.readOnlyButton.setToolTip("写入模式")

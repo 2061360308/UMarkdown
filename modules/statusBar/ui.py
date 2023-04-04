@@ -60,10 +60,10 @@ class StatusBarUI(QStatusBar):
         self.readOnlyButton = QPushButton(self)
         self.readOnlyButton.setProperty("class", "iconfontW")
         self.readOnlyButton.setFlat(True)
-        self.readOnlyButton.setToolTip("只读模式")
+        self.readOnlyButton.setToolTip("读写模式")
         # self.readOnlyButton.setFixedSize(self.button_widget_size)
-        self.readOnlyButton.setText(chr(0xe67a))
-        self.readOnlyButton.setStyleSheet("font-size:12px;")
+        self.readOnlyButton.setText(chr(0xe678))
+        self.readOnlyButton.setStyleSheet("font-size:13px;")
         # self.readOnlyButton.setIcon(QPixmap(":/icons/images/icons/cil-lock-unlocked.png"))  # cil-lock-locked
         # self.readOnlyButton.setIconSize(self.button_widget_size)
         self.addPermanentWidget(self.readOnlyButton)

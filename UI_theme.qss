@@ -31,29 +31,29 @@ QSplitter::handle:pressed{{
 
 
 #MainWindowSplitter{{
-    border-left: 5px solid #AA4f5b62;
-    border-right: 5px solid #AA31363b;
+    border-left: 5px solid #E84f5b62;
+    border-right: 5px solid #E831363b;
 }}
 
 #titleMenuBar{{
     background-color:{QTMATERIAL_SECONDARYLIGHTCOLOR};
-    border-bottom: 1px solid #AA232629;
+    border-bottom: 1px solid #E8232629;
 }}
 
 
 
 #stackedW{{
-    background-color:#AA4f5b62;
-    border-top: 1px solid #AA232629;
-    border-bottom: 1px solid #AA232629;
+    background-color:#E84f5b62;
+    border-top: 1px solid #E8232629;
+    border-bottom: 1px solid #E8232629;
 }}
 
 #editorTabWidget::tab-bar {{
-    background-color:#AA232629;
+    background-color:#E8232629;
 }}
 
 #editorTabWidget > QWidget {{
-    background-color:#AA232629;
+    background-color:#E8232629;
     
 }}
 
@@ -61,11 +61,11 @@ QSplitter::handle:pressed{{
 
 
 #statusBarW{{
-    background-color:#AA4f5b62;
+    background-color:#E84f5b62;
 }}
 
 #toolBarW{{
-    background-color:#AA4f5b62;
+    background-color:#E84f5b62;
 }}
 
 #vimModeButton {{

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MarkdownEditor</title>
+
+    <link href="codemirror-5.65.11/lib/codemirror.css" rel=stylesheet>
+    <script src="codemirror-5.65.11/lib/codemirror.js"></script>
+
+    <!-- 引入支持的语法 -->
+    <script src="codemirror-5.65.11/mode/xml/xml.js"></script>
+    <script src="codemirror-5.65.11/mode/javascript/javascript.js"></script>
+    <script src="codemirror-5.65.11/mode/css/css.js"></script>
+    <script src="codemirror-5.65.11/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="codemirror-5.65.11/mode/python/python.js"></script>
+    <script src="codemirror-5.65.11/mode/markdown/markdown.js"></script>
+
+    <!--<link href="codemirror-5.65.11/theme/dracula.css" rel="stylesheet"/>-->
+
+    <script src="codemirror-5.65.11/addon/edit/matchbrackets.js"></script>
+
+    <!--全屏-->
+    <link rel="stylesheet" href="codemirror-5.65.11/addon/display/fullscreen.css">
+<!--    <script src="codemirror-5.65.11/addon/display/fullscreen.js"></script>-->
+
+    <!--自动补全-->
+    <link rel="stylesheet" href="codemirror-5.65.11/addon/hint/show-hint.css">
+    <script src="codemirror-5.65.11/addon/hint/show-hint.js"></script>
+    <script src="codemirror-5.65.11/addon/hint/anyword-hint.js"></script>
+
+    <!--支持代码折叠-->
+    <link rel="stylesheet" href="codemirror-5.65.11/addon/fold/foldgutter.css"/>
+    <script src="codemirror-5.65.11/addon/fold/foldcode.js"></script>
+    <script src="codemirror-5.65.11/addon/fold/foldgutter.js"></script>
+    <script src="codemirror-5.65.11/addon/fold/brace-fold.js"></script>
+    <script src="codemirror-5.65.11/addon/fold/comment-fold.js"></script>
+
+
+    <link rel="stylesheet" href="codemirror-5.65.11/theme/duotone-light.css">
+    <!--<link rel="stylesheet" href="editor/markdown.css">-->
+    <!--<link rel="stylesheet" href="editor/css/editor_app.css">-->
+    <link rel="stylesheet" href="editor/css/dark.css">
+    <!--<link rel="stylesheet" href="editor/css/google-dark.min.css">-->
+    <link rel="stylesheet" href="editor/css/theme2.css">
+</head>
+<body scroll="no">
+<!--悬浮按钮-->
+<!--<div id="button_group">-->
+<!--    <div id="editorOnly" class="button iconfont" title="编辑">&#xe603;</div>-->
+<!--    <div id="editorAndPreview"  class="button iconfont" title="预览">&#xe605;</div>-->
+<!--    <div id="previewOnly"  class="button iconfont" title="查看">&#xe604;</div>-->
+<!--</div>-->
+<!--编辑器容器-->
+<div id="editor">
+
+</div>
+<!--分割条-->
+<div id="splitter">
+    <div id="splitter_line" height="100%"></div>
+</div>
+<!--预览容器-->
+<div id="preview" class="cm-s-dracula">
+    <div id="preview_inner">
+    </div>
+</div>
+
+<script src="editor/js/marked.min.js"></script>
+<script src="editor/js/jquery-3.6.1.min.js"></script>
+
+<script>
+    const splitter_w = 20
+    const editorElm = document.getElementById('editor');
+    const splitter = document.getElementById("splitter");
+    const preview = document.getElementById("preview");
+    const preview_inner = document.getElementById("preview_inner")
+    const value = "# 标题\n" +
+    "```python\n" +
+    "class People(Object):\n" +
+    "    def __init__(self):\n" +
+    "   \t\tself.name = \"LuTong\"\n" +
+    "    \tself.age = 18\n" +
+    "```\n" +
+    "```mermaid\n" +
+    "graph TD;\n" +
+    "A-->B;\n" +
+    "A-->C;\n" +
+    "B-->D;\n" +
+    "C-->D;\n" +
+    "```"
+    const editor = CodeMirror(editorElm, {
+        mode: {name: 'markdown', highlightFormatting: true, allowAtxHeaderWithoutSpace: true},  //编辑器语言
+        theme: 'dracula', //编辑器主题
+        extraKeys: {"Ctrl": "autocomplete"},//ctrl可以弹出选择项
+        lineNumbers: true,  //显示行号
+        // lineWrapping: true, // 换行
+        // lineWrapping: true,	//代码折叠
+        foldGutter: true,  // 折叠
+        indentUnit: 4,  // 自动缩进个数
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter","CodeMirror-lint-markers"],  //沟槽
+        matchBrackets: true,	//括号匹配
+        tabindex:4,
+        addModeClass: true,
+        //readOnly: true,        //只读
+    });
+</script>
+<script src="./editor/app.js"></script>
+<script src="./editor/markdown.js"></script>
+<script src="./editor/markdown_parse.js" type="app/worker"></script>
+<script src="./editor/js/highlight.min.js" type="app/worker"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>-->
+<script>
+    const markdown_parse_worker = new Worker('./editor/markdown_parse.js'); // 创建worker
+    markdown_parse_worker.addEventListener('message', e => { // 接收消息
+        //console.log(e.data); // Greeting from Worker.js，worker线程发送的消息
+        //let parsed_html =  //拿到解析后的html内容
+        preview_inner.innerHTML = e.data;
+        let mermaidElm = document.getElementsByClassName("mermaid");
+    });
+    editor.setValue(value);
+</script>
+</body>
+</html>

@@ -1,6 +1,10 @@
+import json
+import os.path
+import shutil
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPainter, QAction, QIcon, QCloseEvent, QKeySequence
-from PySide6.QtWidgets import QMenu, QFileDialog
+from PySide6.QtWidgets import QMenu, QFileDialog, QMessageBox
 
 from AppUMarkdown.app_fun.windows_state import save_state, load_state
 from AppUMarkdown.application.extensions import appQSettings
@@ -12,6 +16,8 @@ from ..theme.themeMain import Theme
 
 
 class MainWindow(MainWindowUI):
+    previewThemesDict = {}  # 预览主题的字典
+
     def __init__(self):
         super(MainWindow, self).__init__()
         self.init()
@@ -31,30 +37,34 @@ class MainWindow(MainWindowUI):
         self.fileSave = QAction("保存", self)
         self.fileSave.setShortcut(QKeySequence.Save)
         self.fileSaveAs = QAction("另存为", self)
-        self.fileOpenRecent = QAction("打开最近(待开发)", self)
+
+        # 加载最近文件列表
+        self.fileOpenRecent = QMenu("打开最近", self)
+        self.updateRecentFilesMenu()
+
         self.fileCloseAll = QAction("关闭当前所有文件", self)
-        self.fileSettings = QAction("设置(待开发)", self)
-        self.fileAttribute = QAction("文件属性(待开发)", self)
-        self.fileSaveAll = QAction("全部保存(待开发)", self)
-        self.fileReload = QAction("从磁盘全部重新加载(待开发)", self)
-        self.fileManageSettings = QAction("管理设置文件(待开发)", self)
-        self.fileSaveAsTemplate = QAction("将文件另存为模板(待开发)", self)
+        # self.fileSettings = QAction("设置(待开发)", self)
+        # self.fileAttribute = QAction("文件属性(待开发)", self)
+        self.fileSaveAll = QAction("全部保存", self)
+        # self.fileReload = QAction("从磁盘全部重新加载", self)
+        # self.fileManageSettings = QAction("管理设置文件(待开发)", self)
+        # self.fileSaveAsTemplate = QAction("将文件另存为模板(待开发)", self)
         self.fileQuit = QAction("退出", self)
         self.file.addAction(self.fileCreate)
         self.file.addAction(self.fileOpen)
         self.file.addAction(self.fileSave)
         self.file.addAction(self.fileSaveAs)
-        self.file.addAction(self.fileOpenRecent)
+        self.file.addMenu(self.fileOpenRecent)
         self.file.addAction(self.fileCloseAll)
         self.file.addSeparator()
-        self.file.addAction(self.fileSettings)
-        self.file.addAction(self.fileAttribute)
-        self.file.addSeparator()
+        # self.file.addAction(self.fileSettings)
+        # self.file.addAction(self.fileAttribute)
+        # self.file.addSeparator()
         self.file.addAction(self.fileSaveAll)
-        self.file.addAction(self.fileReload)
+        # self.file.addAction(self.fileReload)
         self.file.addSeparator()
-        self.file.addAction(self.fileManageSettings)
-        self.file.addAction(self.fileSaveAsTemplate)
+        # self.file.addAction(self.fileManageSettings)
+        # self.file.addAction(self.fileSaveAsTemplate)
         self.file.addSeparator()
         self.file.addAction(self.fileQuit)
 
@@ -122,12 +132,16 @@ class MainWindow(MainWindowUI):
 
         self.titleMenuBar.addMenu("工具(T)")
 
-        theme = self.titleMenuBar.addMenu("主题(S)")
-        theme.triggered[QAction].connect(self.themeClicked)
-        themeUI = QAction("界面主题", self)
-        themePreview = QAction("预览主题", self)
-        theme.addAction(themeUI)
-        theme.addAction(themePreview)
+        self.theme = self.titleMenuBar.addMenu("主题(S)")
+        self.theme.triggered[QAction].connect(self.themeClicked)
+        self.themeUI = QAction("界面主题", self)
+        self.themePreview = QMenu("预览主题", self)
+        self.theme.addAction(self.themeUI)
+        self.theme.addMenu(self.themePreview)
+
+        # 加载所有可用主题
+
+        self.updatePreviewThemeMenu()
 
         self.help = self.titleMenuBar.addMenu("帮助(H)")
         self.helpGithub = QAction("UMarkdown Github主页")
@@ -140,12 +154,62 @@ class MainWindow(MainWindowUI):
         self.tocWidget.tocClickedSignal.connect(self.tocTitleClicked)
 
     def themeClicked(self, action: QAction):
+        """
+        主题菜单被点击
+        :param action:
+        :return:
+        """
         text = action.text()
         if text == "界面主题":
             self.themeW = Theme()
             self.themeW.show()
-        elif text == "预览主题":
-            pass
+        else:
+            parentTitle = action.parent().title()
+            if parentTitle == "预览主题":
+                oldPreviewTheme = appQSettings.value("PreviewTheme")
+                newPreviewTheme = self.previewThemesDict[text]
+                appQSettings.setValue("PreviewTheme", newPreviewTheme)
+                if oldPreviewTheme is None:
+                    oldPreviewTheme = "editor/css/dark.css"
+
+                # 删除原有主题
+                shutil.rmtree('codemirror/editor/css/previewTheme')
+                os.mkdir('codemirror/editor/css/previewTheme')
+
+                # 复制新主题到主题目录
+                source_path = os.path.abspath(os.path.join(newPreviewTheme, os.pardir))
+                target_path = os.path.abspath(r'codemirror/editor/css/previewTheme')
+
+                if not os.path.exists(target_path):
+                    os.makedirs(target_path)
+
+                if os.path.exists(source_path):
+                    # root 所指的是当前正在遍历的这个文件夹的本身的地址
+                    # dirs 是一个 list，内容是该文件夹中所有的目录的名字(不包括子目录)
+                    # files 同样是 list, 内容是该文件夹中所有的文件(不包括子目录)
+                    for root, dirs, files in os.walk(source_path):
+                        for file in files:
+                            if root == source_path:
+                                src_file = os.path.join(root, file)
+                                shutil.copy(src_file, target_path)
+                            else:
+                                # 创建子目录
+                                childrenDir = root.replace(source_path, "")
+                                if childrenDir.startswith("\\"):
+                                    childrenDir = childrenDir[1:]
+
+                                target_path_children = os.path.join(target_path, childrenDir)
+                                if not os.path.isdir(target_path_children):
+                                    # os.mkdir(target_path_children)
+                                    os.makedirs(target_path_children)
+                                # 复制
+                                src_file = os.path.join(root, file)
+                                shutil.copy(src_file, target_path_children)
+
+                # 更新主题
+                old_name = "editor/css/previewTheme/" + oldPreviewTheme.split("\\")[-1]
+                new_name = "editor/css/previewTheme/" + newPreviewTheme.split("\\")[-1]
+                self.editorTabWidget.updatePreviewTheme(old_name, new_name)
 
     def fileMenuClicked(self, action: QAction):
         text = action.text()
@@ -169,6 +233,23 @@ class MainWindow(MainWindowUI):
             self.close()
         elif text == "保存":
             self.editorTabWidget.saveFile()
+        elif text == "全部保存":
+            self.editorTabWidget.saveFileAll()
+        else:
+            parentTitle = action.parent().title()
+
+            if parentTitle == "打开最近":
+                if os.path.isfile(text):
+                    self.editorTabWidget.openFile(text)
+                else:
+                    recentFiles = json.loads(appQSettings.value("History/recentFiles"))
+                    if text in recentFiles:
+                        recentFiles.remove(text)
+                    appQSettings.setValue("History/recentFiles", json.dumps(recentFiles))
+                    self.updateRecentFilesMenu(recentFiles)
+
+                    QMessageBox.information(self, "文件不存在", "所选文件不存在，已将其从历史记录中删除！",
+                                            QMessageBox.Yes | QMessageBox.Yes)
 
     def editMenuClicked(self, action: QAction):
         text = action.text()
@@ -210,7 +291,7 @@ class MainWindow(MainWindowUI):
             if widget.selections:
                 selection = widget.selections[0]
 
-                widget.changeSelectionContent("![" + selection+"]()")
+                widget.changeSelectionContent("![" + selection + "]()")
             else:
                 widget.insertContent("![]()")
         elif text == "链接":
@@ -345,6 +426,39 @@ class MainWindow(MainWindowUI):
             else:
                 widget.insertContent("1. ")
 
+    def updateRecentFilesMenu(self, recentFiles: list = None):
+        """
+        更新打开最近的菜单
+        :param recentFiles: 文件列表
+        :return:
+        """
+        self.fileOpenRecent.clear()
+
+        if recentFiles is None:
+            recentFiles = json.loads(appQSettings.value("History/recentFiles"))
+
+        for filePath in recentFiles:
+            self.fileOpenRecent.addAction(filePath)
+
+    def updatePreviewThemeMenu(self):
+        """
+        更新预览主题的菜单
+        :return:
+        """
+        for file in os.walk("res/previewThems"):
+            rootPath = file[0]  # 根目录
+            #  筛选俩层目录，名称开头不为_的目录
+            if len(rootPath.replace("res/previewThems\\", '').split("\\")) == 2 and not \
+                    rootPath.replace("res/previewThems\\", '').split("\\")[-1].startswith("_"):
+                # 输出".css"文件
+                for name in file[2]:
+                    if name.endswith(".css"):
+                        themeName = name.replace(".css", "")
+                        self.themePreview.addAction(themeName)
+                        themePath = os.path.join(rootPath, name)
+                        self.previewThemesDict[themeName] = themePath
+                        # print(os.path.join(rootPath, name))
+                        # print(themeName)
 
     def tocTitleClicked(self, href):
         self.editorTabWidget.currentWidget().skipTitle(href)

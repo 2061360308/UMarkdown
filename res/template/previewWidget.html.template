@@ -1,0 +1,54 @@
+<!-- 预览界面展示的页面 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PerviewWidget</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #preview{
+            background-color: #00000000;
+            width: 100%;
+            height: 100%;
+        }
+        #preview_inner{
+            width: 100%;
+            height: 100%;
+            overflow: scroll;
+        }
+    </style>
+
+    <link rel="stylesheet" href="editor/css/theme.css">     <!--复用它的滚动条样式-->
+
+    <link rel="stylesheet" href="editor/css/previewTheme/{{cssFilePath}}">
+
+    <!-- 为Qt提供支持 -->
+    <script src='qrc:///qtwebchannel/qwebchannel.js'></script>
+
+    <script src="editor/js/jquery-3.6.1.min.js"></script>
+    <script src="editor/js/marked.min.js"></script>
+    <script src="./editor/js/highlight.min.js"></script>
+    <link rel="stylesheet" href="editor/css/google-dark.min.css"><!--代码解析样式-->
+    <script src="editor/PreviewWidget.js"></script>
+</head>
+<body>
+<!--预览容器-->
+<div id="preview" class="cm-s-dracula">
+    <div id="preview_inner">
+    </div>
+</div>
+<script>
+    const preview = document.getElementById("preview");
+    const preview_inner = document.getElementById("preview_inner")
+</script>
+</body>
+</html>
